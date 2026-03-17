@@ -5,20 +5,55 @@ public class Inventario : MonoBehaviour
 {
     public static Inventario instancia;
 
-    private List<string> objetos = new List<string>();
+    private List<ObjetoRecolectable> objetos = new List<ObjetoRecolectable>();
 
     void Awake()
     {
+        if (instancia != null && instancia != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         instancia = this;
     }
 
-    public void AgregarObjeto(string nombre)
+    public void AgregarObjeto(ObjetoRecolectable objeto)
     {
-        objetos.Add(nombre);
-        Debug.Log($"Inventario: se agregó '{nombre}'. Total: {objetos.Count}");
+        if (objeto == null)
+        {
+            Debug.LogWarning("[Inventario] Se intentó agregar un objeto nulo.");
+            return;
+        }
+
+        objetos.Add(objeto);
+        Debug.Log($"[Inventario] Se agregó '{objeto.nombreObjeto}'. Total: {objetos.Count}");
     }
 
-    public List<string> ObtenerObjetos()
+    public void QuitarObjeto(ObjetoRecolectable objeto)
+    {
+        if (objeto == null) return;
+
+        if (objetos.Remove(objeto))
+        {
+            Debug.Log($"[Inventario] Se quitó '{objeto.nombreObjeto}'. Total: {objetos.Count}");
+        }
+    }
+
+    public ObjetoRecolectable ObtenerUltimoObjeto()
+    {
+        if (objetos.Count == 0)
+            return null;
+
+        return objetos[objetos.Count - 1];
+    }
+
+    public bool TieneObjetos()
+    {
+        return objetos.Count > 0;
+    }
+
+    public List<ObjetoRecolectable> ObtenerObjetos()
     {
         return objetos;
     }

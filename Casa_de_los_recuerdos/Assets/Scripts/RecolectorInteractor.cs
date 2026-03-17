@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 
 public class RecolectorInteractor : MonoBehaviour
 {
-
     public float radioDeteccion = 2f;
     public LayerMask capasDetectables;
 
@@ -21,22 +20,46 @@ public class RecolectorInteractor : MonoBehaviour
     {
         BuscarObjetosCercanos();
 
-        //Interacción con E
+        // Interacción con E
         if (interactuableActual != null && Keyboard.current.eKey.wasPressedThisFrame)
         {
+            ObjetoRecolectable objetoInventario = Inventario.instancia.ObtenerUltimoObjeto();
+
+            if (objetoInventario != null)
+            {
+                bool seColoco = interactuableActual.IntentarColocarObjeto(objetoInventario);
+
+                if (seColoco)
+                {
+                    Inventario.instancia.QuitarObjeto(objetoInventario);
+
+                    Debug.Log($"[Interactor] Se colocó '{objetoInventario.nombreObjeto}' usando la tecla E.");
+
+                    if (panelRecoleccion != null)
+                        panelRecoleccion.SetActive(false);
+
+                    return;
+                }
+                else
+                {
+                    Debug.Log("[Interactor] No se pudo colocar el objeto del inventario.");
+                }
+            }
+
+            // Si no hay objeto en inventario, se comporta como antes
             if (!panelAbierto)
                 AbrirPanel(interactuableActual.mensaje);
             else
                 CerrarPanel();
         }
 
-        //Recolectar con click derecho
+        // Recolectar con click derecho
         if (recolectableActual != null && Mouse.current.rightButton.wasPressedThisFrame)
         {
             Recolectar(recolectableActual);
         }
 
-        //Cerrar panel si el jugador se aleja
+        // Cerrar panel si el jugador se aleja
         if (panelAbierto && interactuableActual == null)
         {
             CerrarPanel();
@@ -55,24 +78,29 @@ public class RecolectorInteractor : MonoBehaviour
             if (col.CompareTag("Recolectable"))
             {
                 ObjetoRecolectable or = col.GetComponent<ObjetoRecolectable>();
-                Debug.Log($"Tag Recolectable encontrado en: {col.gameObject.name} | Componente: {or}");
-                if (or != null)
+
+                if (or != null && !or.estaEnInventario && !or.yaFueColocado)
                 {
                     recolectableActual = or;
-                    Debug.Log("Panel recoleccion debería activarse");
                     MostrarIndicadorRecoleccion("Click derecho para recoger");
+                    Debug.Log($"[Interactor] Recolectable detectado: {or.nombreObjeto}");
                 }
             }
 
             if (col.CompareTag("Interactuable"))
             {
                 ObjetoInteractuable oi = col.GetComponent<ObjetoInteractuable>();
-                Debug.Log($"Tag Interactuable encontrado en: {col.gameObject.name} | Componente: {oi}");
+
                 if (oi != null)
                 {
                     interactuableActual = oi;
-                    Debug.Log("Panel interaccion debería activarse");
-                    MostrarIndicadorRecoleccion("Presiona E para interactuar");
+
+                    if (Inventario.instancia != null && Inventario.instancia.TieneObjetos())
+                        MostrarIndicadorRecoleccion("Presiona E para colocar objeto");
+                    else
+                        MostrarIndicadorRecoleccion("Presiona E para interactuar");
+
+                    Debug.Log($"[Interactor] Interactuable detectado: {oi.gameObject.name}");
                 }
             }
         }
@@ -87,9 +115,11 @@ public class RecolectorInteractor : MonoBehaviour
     void AbrirPanel(string mensaje)
     {
         panelAbierto = true;
+
         if (panelInteraccion != null)
         {
             panelInteraccion.SetActive(true);
+
             if (textoInteraccion != null)
                 textoInteraccion.text = mensaje;
         }
@@ -98,19 +128,28 @@ public class RecolectorInteractor : MonoBehaviour
     void CerrarPanel()
     {
         panelAbierto = false;
+
         if (panelInteraccion != null)
             panelInteraccion.SetActive(false);
     }
 
     void Recolectar(ObjetoRecolectable objeto)
     {
-        Inventario.instancia.AgregarObjeto(objeto.nombreObjeto);
+        if (objeto == null)
+        {
+            Debug.LogWarning("[Interactor] Se intentó recolectar un objeto nulo.");
+            return;
+        }
+
+        Inventario.instancia.AgregarObjeto(objeto);
+        objeto.GuardarEnInventario();
+
         recolectableActual = null;
 
         if (panelRecoleccion != null)
             panelRecoleccion.SetActive(false);
 
-        Destroy(objeto.gameObject);
+        Debug.Log($"[Interactor] '{objeto.nombreObjeto}' fue recolectado correctamente y enviado al inventario.");
     }
 
     void MostrarIndicadorRecoleccion(string texto)
@@ -118,12 +157,12 @@ public class RecolectorInteractor : MonoBehaviour
         if (panelRecoleccion != null)
         {
             panelRecoleccion.SetActive(true);
+
             if (textoRecoleccion != null)
                 textoRecoleccion.text = texto;
         }
     }
 
-    // Dibuja el radio de detección en el editor
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
