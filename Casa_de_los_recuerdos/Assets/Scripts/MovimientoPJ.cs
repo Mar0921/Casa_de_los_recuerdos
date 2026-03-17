@@ -6,11 +6,18 @@ public class MovimientoPJ : MonoBehaviour
     public float velocidadMovimiento = 5f;
     public float velocidadRotacion = 200f;
     public float fuerzaDeSalto = 8f;
+    public float fuerzaEmpuje = 5f;
     public bool puedoSaltar;
+
+    private float velocidadInicial;
+    public float velocidadAgachado;
+    private bool estaAgachado = false;
 
     private Rigidbody rb;
     private Animator anim;
     private float x, y;
+    private bool estaEmpujando = false;
+    private Rigidbody objetoEmpujado = null;
 
     void Start()
     {
@@ -18,6 +25,9 @@ public class MovimientoPJ : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+
+        velocidadInicial = velocidadMovimiento;
+        velocidadAgachado = velocidadMovimiento * 0.5f;
     }
 
     void Update()
@@ -33,11 +43,36 @@ public class MovimientoPJ : MonoBehaviour
 
         anim.SetFloat("VelX", x);
         anim.SetFloat("VelY", y);
+        anim.SetBool("estaEmpujando", estaEmpujando);
+
+        //Si el personaje esta agachado:
+        if (puedoSaltar)
+        {
+            if (Keyboard.current.rKey.isPressed)
+            {
+                estaAgachado = true;
+                velocidadMovimiento = velocidadAgachado;
+            }
+            else
+            {
+                estaAgachado = false;
+                velocidadMovimiento = velocidadInicial;
+            }
+        }
+        else
+        {
+            // Si está en el aire, cancelar agachado
+            estaAgachado = false;
+            velocidadMovimiento = velocidadInicial;
+        }
+
+        anim.SetBool("agachado", estaAgachado);
 
         if (puedoSaltar && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             Saltar();
         }
+
     }
 
     void FixedUpdate()
@@ -59,6 +94,11 @@ public class MovimientoPJ : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(movimiento);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
+        if (estaEmpujando && objetoEmpujado != null && movimiento != Vector3.zero)
+        {
+            Vector3 direccionEmpuje = movimiento.normalized;
+            objetoEmpujado.AddForce(direccionEmpuje * fuerzaEmpuje, ForceMode.Force);
+        }
     }
 
     void Saltar()
@@ -76,6 +116,19 @@ public class MovimientoPJ : MonoBehaviour
             puedoSaltar = true;
             anim.SetBool("salte", false);
             anim.SetBool("tocoSuelo", true);
+        }
+        if (collision.gameObject.CompareTag("Empujable"))
+        {
+            estaEmpujando = true;
+            objetoEmpujado = collision.gameObject.GetComponent<Rigidbody>();
+        }
+    }
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Empujable"))
+        {
+            estaEmpujando = false;
+            objetoEmpujado = null;
         }
     }
 }
