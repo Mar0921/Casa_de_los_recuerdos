@@ -7,11 +7,15 @@ public class MovimientoPJ : MonoBehaviour
     public float velocidadRotacion = 200f;
     public float fuerzaDeSalto = 8f;
     public float fuerzaEmpuje = 5f;
+
+    public float velocidadNormal = 5f;
+    public float velocidadEnSombra = 1f;
+    public float velocidadAgachado;
     public bool puedoSaltar;
 
     private float velocidadInicial;
-    public float velocidadAgachado;
     private bool estaAgachado = false;
+    private bool enSombra = false;
 
     private Rigidbody rb;
     private Animator anim;
@@ -27,7 +31,13 @@ public class MovimientoPJ : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         velocidadInicial = velocidadMovimiento;
-        velocidadAgachado = velocidadMovimiento * 0.5f;
+
+        if (velocidadNormal <= 0f)
+            velocidadNormal = velocidadInicial;
+
+        velocidadAgachado = velocidadNormal * 0.5f;
+
+        ActualizarVelocidad();
     }
 
     void Update()
@@ -45,39 +55,32 @@ public class MovimientoPJ : MonoBehaviour
         anim.SetFloat("VelY", y);
         anim.SetBool("estaEmpujando", estaEmpujando);
 
-        //Si el personaje esta agachado:
+        // Si el personaje está agachado
         if (puedoSaltar)
         {
-            if (Keyboard.current.rKey.isPressed)
-            {
-                estaAgachado = true;
-                velocidadMovimiento = velocidadAgachado;
-            }
-            else
-            {
-                estaAgachado = false;
-                velocidadMovimiento = velocidadInicial;
-            }
+            estaAgachado = Keyboard.current.rKey.isPressed;
         }
         else
         {
-            // Si está en el aire, cancelar agachado
             estaAgachado = false;
-            velocidadMovimiento = velocidadInicial;
         }
 
         anim.SetBool("agachado", estaAgachado);
+
+        // Recalcular velocidad sin pisar la lógica de sombra
+        ActualizarVelocidad();
 
         if (puedoSaltar && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             Saltar();
         }
-
     }
 
     void FixedUpdate()
     {
         Camera cam = Camera.main;
+        if (cam == null) return;
+
         Vector3 forward = cam.transform.forward;
         Vector3 right = cam.transform.right;
 
@@ -94,6 +97,7 @@ public class MovimientoPJ : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(movimiento);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
+
         if (estaEmpujando && objetoEmpujado != null && movimiento != Vector3.zero)
         {
             Vector3 direccionEmpuje = movimiento.normalized;
@@ -117,12 +121,14 @@ public class MovimientoPJ : MonoBehaviour
             anim.SetBool("salte", false);
             anim.SetBool("tocoSuelo", true);
         }
+
         if (collision.gameObject.CompareTag("Empujable"))
         {
             estaEmpujando = true;
             objetoEmpujado = collision.gameObject.GetComponent<Rigidbody>();
         }
     }
+
     void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Empujable"))
@@ -130,5 +136,23 @@ public class MovimientoPJ : MonoBehaviour
             estaEmpujando = false;
             objetoEmpujado = null;
         }
+    }
+
+    void ActualizarVelocidad()
+    {
+        float velocidadBase = enSombra ? velocidadEnSombra : velocidadNormal;
+
+        if (estaAgachado)
+            velocidadMovimiento = velocidadBase * 0.5f;
+        else
+            velocidadMovimiento = velocidadBase;
+    }
+
+    public void EnSombra(bool activo)
+    {
+        enSombra = activo;
+        ActualizarVelocidad();
+
+        Debug.Log("EnSombra: " + activo + " | Velocidad: " + velocidadMovimiento);
     }
 }
