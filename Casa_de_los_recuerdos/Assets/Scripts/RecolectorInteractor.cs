@@ -20,7 +20,6 @@ public class RecolectorInteractor : MonoBehaviour
     {
         BuscarObjetosCercanos();
 
-        // Interacción con E
         if (interactuableActual != null && Keyboard.current.eKey.wasPressedThisFrame)
         {
             ObjetoRecolectable objetoInventario = Inventario.instancia.ObtenerUltimoObjeto();
@@ -46,20 +45,17 @@ public class RecolectorInteractor : MonoBehaviour
                 }
             }
 
-            // Si no hay objeto en inventario, se comporta como antes
             if (!panelAbierto)
                 AbrirPanel(interactuableActual.mensaje);
             else
                 CerrarPanel();
         }
 
-        // Recolectar con click derecho
         if (recolectableActual != null && Mouse.current.rightButton.wasPressedThisFrame)
         {
             Recolectar(recolectableActual);
         }
 
-        // Cerrar panel si el jugador se aleja
         if (panelAbierto && interactuableActual == null)
         {
             CerrarPanel();
@@ -83,7 +79,6 @@ public class RecolectorInteractor : MonoBehaviour
                 {
                     recolectableActual = or;
                     MostrarIndicadorRecoleccion("Click derecho para recoger");
-                    Debug.Log($"[Interactor] Recolectable detectado: {or.nombreObjeto}");
                 }
             }
 
@@ -94,13 +89,7 @@ public class RecolectorInteractor : MonoBehaviour
                 if (oi != null)
                 {
                     interactuableActual = oi;
-
-                    if (Inventario.instancia != null && Inventario.instancia.TieneObjetos())
-                        MostrarIndicadorRecoleccion("Presiona E para colocar objeto");
-                    else
-                        MostrarIndicadorRecoleccion("Presiona E para interactuar");
-
-                    Debug.Log($"[Interactor] Interactuable detectado: {oi.gameObject.name}");
+                    MostrarIndicadorRecoleccion(oi.mensaje);
                 }
             }
         }

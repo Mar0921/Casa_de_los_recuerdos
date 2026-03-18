@@ -22,7 +22,11 @@ public class MovimientoPJ : MonoBehaviour
     private float x, y;
     private bool estaEmpujando = false;
     private Rigidbody objetoEmpujado = null;
-    public LayerMask capaSuelo; 
+    public LayerMask capaSuelo;
+
+    private float umbralColisionVertical = 0.7f;
+    private float offsetAlturaMinima = 0.3f;
+
     void Start()
     {
         puedoSaltar = false;
@@ -55,7 +59,6 @@ public class MovimientoPJ : MonoBehaviour
         anim.SetFloat("VelY", y);
         anim.SetBool("estaEmpujando", estaEmpujando);
 
-        // Si el personaje está agachado
         if (puedoSaltar)
         {
             estaAgachado = Keyboard.current.rKey.isPressed;
@@ -66,8 +69,6 @@ public class MovimientoPJ : MonoBehaviour
         }
 
         anim.SetBool("agachado", estaAgachado);
-
-        // Recalcular velocidad sin pisar la lógica de sombra
         ActualizarVelocidad();
 
         if (puedoSaltar && Keyboard.current.spaceKey.wasPressedThisFrame)
@@ -90,10 +91,12 @@ public class MovimientoPJ : MonoBehaviour
         right.Normalize();
 
         Vector3 movimiento = (right * x + forward * y) * velocidadMovimiento * Time.deltaTime;
-        transform.position += movimiento;
 
         if (movimiento != Vector3.zero)
         {
+            Vector3 nuevaPosicion = rb.position + movimiento;
+            rb.MovePosition(nuevaPosicion);
+
             Quaternion targetRotation = Quaternion.LookRotation(movimiento);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
@@ -113,6 +116,28 @@ public class MovimientoPJ : MonoBehaviour
         rb.AddForce(Vector3.up * fuerzaDeSalto, ForceMode.Impulse);
     }
 
+    bool EstaEncimaDelObjeto(Collision collision)
+    {
+        Bounds cajaBounds = collision.collider.bounds;
+        float topeDeCaja = cajaBounds.max.y;
+        float basePJ = transform.position.y - GetComponent<Collider>().bounds.extents.y;
+
+        if (basePJ >= topeDeCaja - offsetAlturaMinima)
+        {
+            return true;
+        }
+
+        foreach (ContactPoint contacto in collision.contacts)
+        {
+            if (contacto.normal.y > umbralColisionVertical)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (((1 << collision.gameObject.layer) & capaSuelo) != 0)
@@ -124,8 +149,30 @@ public class MovimientoPJ : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Empujable"))
         {
-            estaEmpujando = true;
-            objetoEmpujado = collision.gameObject.GetComponent<Rigidbody>();
+            if (!EstaEncimaDelObjeto(collision))
+            {
+                estaEmpujando = true;
+                objetoEmpujado = collision.gameObject.GetComponent<Rigidbody>();
+            }
+        }
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Empujable"))
+        {
+            bool estaEncima = EstaEncimaDelObjeto(collision);
+
+            if (estaEncima && estaEmpujando)
+            {
+                estaEmpujando = false;
+                objetoEmpujado = null;
+            }
+            else if (!estaEncima && !estaEmpujando)
+            {
+                estaEmpujando = true;
+                objetoEmpujado = collision.gameObject.GetComponent<Rigidbody>();
+            }
         }
     }
 

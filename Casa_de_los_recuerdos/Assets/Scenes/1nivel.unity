@@ -1237,6 +1237,9 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 339518781}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 339518774}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
       insertIndex: -1
@@ -1250,6 +1253,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
       insertIndex: -1
       addedObject: {fileID: 339518778}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 339518780}
   m_SourcePrefab: {fileID: 100100000, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
 --- !u!1 &339518769 stripped
 GameObject:
@@ -1371,6 +1377,119 @@ MonoBehaviour:
   duracion: 6
   cooldown: 20
   velocidadTransicion: 6
+--- !u!82 &339518780
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339518769}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &339518781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339518769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 482c5c6a26235df49ba3a68988466b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SonidoPasos
+  audioSource: {fileID: 339518780}
+  sonidoPaso: {fileID: 8300000, guid: 43a6b046fef08564bb925eb381526e6d, type: 3}
+  intervaloEntrepasos: 0.5
+  umbralVelocidad: 0.1
 --- !u!1 &341962180
 GameObject:
   m_ObjectHideFlags: 0
@@ -2768,7 +2887,6 @@ Transform:
   - {fileID: 342122643}
   - {fileID: 172632131}
   - {fileID: 178397216}
-  - {fileID: 1318726244}
   - {fileID: 33357884}
   - {fileID: 1973052871}
   m_Father: {fileID: 0}
@@ -3262,12 +3380,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1318726243}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -17.74, y: 26.51, z: -8.13}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.8979368, y: -0.43478215, z: -0.054761834, w: 0.040927585}
+  m_LocalPosition: {x: 59.140995, y: 69.570114, z: 421.32202}
+  m_LocalScale: {x: 133.97359, y: 133.97362, z: 133.97359}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 910646282}
+  m_Father: {fileID: 1151388027732518247}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &1318726245
 MonoBehaviour:
@@ -4135,9 +4253,13 @@ GameObject:
   - component: {fileID: 1612593528}
   - component: {fileID: 1612593530}
   - component: {fileID: 1612593529}
+  - component: {fileID: 1612593532}
+  - component: {fileID: 1612593531}
+  - component: {fileID: 1612593533}
+  - component: {fileID: 1612593534}
   m_Layer: 0
   m_Name: Main_door
-  m_TagString: Untagged
+  m_TagString: Interactuable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4213,6 +4335,79 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1612593527}
   m_Mesh: {fileID: -1296425003458154235, guid: 13457427b5150ac4bb0c3a1e39e92702, type: 3}
+--- !u!65 &1612593531
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612593527}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.022184744, y: 0.04441069, z: 0.0018876366}
+  m_Center: {x: -0.0112832375, y: 0.0224636, z: 0.000849679}
+--- !u!114 &1612593532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612593527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fae089a7799922409722c3a7c713e9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuertaConLlave
+  nombreLlaveRequerida: Llave
+  anguloApertura: 90
+  velocidadApertura: 2
+  consumirLlave: 1
+  mensajeConLlave: Presiona P para abrir la puerta
+  mensajeSinLlave: Necesitas una llave para abrir esta puerta
+--- !u!114 &1612593533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612593527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6adf245dc3806d546b433fccde05e56e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjetoInteractuable
+  mensaje: "Este es un mensaje de interacci\xF3n."
+  puntoColocacion: {fileID: 0}
+  yaTieneObjeto: 0
+  nombreObjetoRequerido: Llave
+--- !u!114 &1612593534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612593527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fae089a7799922409722c3a7c713e9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuertaConLlave
+  nombreLlaveRequerida: Llave
+  anguloApertura: 90
+  velocidadApertura: 2
+  consumirLlave: 1
+  mensajeConLlave: Presiona P para abrir la puerta
+  mensajeSinLlave: Necesitas una llave para abrir esta puerta
 --- !u!1001 &1641412750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5588,7 +5783,8 @@ Transform:
   m_LocalPosition: {x: 2.1390228, y: 27.42202, z: 110.953026}
   m_LocalScale: {x: 0.007464158, y: 0.0074641583, z: 0.007464159}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1318726244}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1587545475335289017
@@ -5662,7 +5858,7 @@ GameObject:
   - component: {fileID: 8164078559921206877}
   m_Layer: 0
   m_Name: Llave
-  m_TagString: Untagged
+  m_TagString: Recolectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5679,7 +5875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fdd76c890acaaf49b5072a251f22089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjetoRecolectable
-  nombreObjeto: Objeto
+  nombreObjeto: Llave
   estaEnInventario: 0
   yaFueColocado: 0
 --- !u!65 &8164078559921206878
