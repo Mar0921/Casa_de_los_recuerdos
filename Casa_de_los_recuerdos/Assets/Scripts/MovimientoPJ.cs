@@ -22,7 +22,7 @@ public class MovimientoPJ : MonoBehaviour
     private float x, y;
     private bool estaEmpujando = false;
     private Rigidbody objetoEmpujado = null;
-
+    public LayerMask capaSuelo; 
     void Start()
     {
         puedoSaltar = false;
@@ -115,7 +115,7 @@ public class MovimientoPJ : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Suelo"))
+        if (((1 << collision.gameObject.layer) & capaSuelo) != 0)
         {
             puedoSaltar = true;
             anim.SetBool("salte", false);
@@ -131,6 +131,11 @@ public class MovimientoPJ : MonoBehaviour
 
     void OnCollisionExit(Collision collision)
     {
+        if (((1 << collision.gameObject.layer) & capaSuelo) != 0)
+        {
+            puedoSaltar = false;
+        }
+
         if (collision.gameObject.CompareTag("Empujable"))
         {
             estaEmpujando = false;
