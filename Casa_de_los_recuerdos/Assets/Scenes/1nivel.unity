@@ -1256,6 +1256,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
       insertIndex: -1
       addedObject: {fileID: 339518780}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 339518784}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 339518782}
   m_SourcePrefab: {fileID: 100100000, guid: 0c5d8fce91acd0d43a334d6e3398cece, type: 3}
 --- !u!1 &339518769 stripped
 GameObject:
@@ -1287,6 +1293,10 @@ MonoBehaviour:
   velocidadEnSombra: 2
   velocidadAgachado: 0
   puedoSaltar: 0
+  audioSource: {fileID: 339518782}
+  sonidoPaso: {fileID: 8300000, guid: 43a6b046fef08564bb925eb381526e6d, type: 3}
+  sonidoSalto: {fileID: 8300000, guid: 73de49b1f0765344a9d451aca124251b, type: 3}
+  intervaloEntrepasos: 0.5
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -1390,7 +1400,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.434
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1486,10 +1496,121 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 482c5c6a26235df49ba3a68988466b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SonidoPasos
-  audioSource: {fileID: 339518780}
-  sonidoPaso: {fileID: 8300000, guid: 43a6b046fef08564bb925eb381526e6d, type: 3}
-  intervaloEntrepasos: 0.5
-  umbralVelocidad: 0.1
+  audioSourceMusica: {fileID: 339518782}
+  musicaFondo: {fileID: 8300000, guid: e64dcf8388de94241973eeac499eb19b, type: 3}
+  volumenMusica: 0
+--- !u!82 &339518782
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339518769}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &339518784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339518769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 482c5c6a26235df49ba3a68988466b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sonidos
+  audioSourceMusica: {fileID: 339518782}
+  musicaFondo: {fileID: 8300000, guid: e64dcf8388de94241973eeac499eb19b, type: 3}
+  volumenMusica: 0.5
 --- !u!1 &341962180
 GameObject:
   m_ObjectHideFlags: 0
@@ -4257,6 +4378,7 @@ GameObject:
   - component: {fileID: 1612593531}
   - component: {fileID: 1612593533}
   - component: {fileID: 1612593534}
+  - component: {fileID: 1612593535}
   m_Layer: 0
   m_Name: Main_door
   m_TagString: Interactuable
@@ -4369,11 +4491,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuertaConLlave
   nombreLlaveRequerida: Llave
+  consumirLlave: 1
   anguloApertura: 90
   velocidadApertura: 2
-  consumirLlave: 1
   mensajeConLlave: Presiona P para abrir la puerta
   mensajeSinLlave: Necesitas una llave para abrir esta puerta
+  audioSource: {fileID: 1612593534}
+  sonidoPuertaAbrir: {fileID: 8300000, guid: b7d27fababc736e41a38bfb5e1568a30, type: 3}
+  sonidoSinLlave: {fileID: 0}
 --- !u!114 &1612593533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4390,24 +4515,131 @@ MonoBehaviour:
   puntoColocacion: {fileID: 0}
   yaTieneObjeto: 0
   nombreObjetoRequerido: Llave
---- !u!114 &1612593534
-MonoBehaviour:
+--- !u!82 &1612593534
+AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1612593527}
   m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1612593535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612593527}
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fae089a7799922409722c3a7c713e9e, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c1e28a3151c5fd4e83441dfa8f4f90e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PuertaConLlave
+  m_EditorClassIdentifier: Assembly-CSharp::FinalNivel
   nombreLlaveRequerida: Llave
   anguloApertura: 90
   velocidadApertura: 2
-  consumirLlave: 1
-  mensajeConLlave: Presiona P para abrir la puerta
-  mensajeSinLlave: Necesitas una llave para abrir esta puerta
+  audioSource: {fileID: 1612593534}
+  sonidoPuertaAbrir: {fileID: 8300000, guid: b7d27fababc736e41a38bfb5e1568a30, type: 3}
+  sonidoSinLlave: {fileID: 0}
+  luces:
+  - {fileID: 33357886}
+  - {fileID: 1973052873}
+  intensidadMax: 3
+  velocidadTransicion: 1.5
+  imagenMundo: {fileID: 1608910642}
+  delayImagen: 2
+  velocidadFade: 1
+  nombreEscena: 2nivel
+  tiempoAntesDeCargar: 5
 --- !u!1001 &1641412750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5561,6 +5793,8 @@ MonoBehaviour:
   nombreObjeto: Objeto
   estaEnInventario: 0
   yaFueColocado: 0
+  sonidoRecoger: {fileID: 0}
+  volumenSonido: 1
 --- !u!1001 &2107283419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5878,6 +6112,8 @@ MonoBehaviour:
   nombreObjeto: Llave
   estaEnInventario: 0
   yaFueColocado: 0
+  sonidoRecoger: {fileID: 8300000, guid: 990c1cfbd4b13004e89f4c8b08c42fc0, type: 3}
+  volumenSonido: 1
 --- !u!65 &8164078559921206878
 BoxCollider:
   m_ObjectHideFlags: 0

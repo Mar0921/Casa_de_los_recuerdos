@@ -2,12 +2,22 @@ using UnityEngine;
 
 public class PuertaConLlave : MonoBehaviour
 {
+    [Header("Configuración Llave")]
     public string nombreLlaveRequerida = "Llave";
+    public bool consumirLlave = true;
+
+    [Header("Animación Puerta")]
     public float anguloApertura = 90f;
     public float velocidadApertura = 2f;
-    public bool consumirLlave = true;
+
+    [Header("Mensajes")]
     public string mensajeConLlave = "Presiona P para abrir la puerta";
     public string mensajeSinLlave = "Necesitas una llave para abrir esta puerta";
+
+    [Header("Sonidos")]
+    public AudioSource audioSource;
+    public AudioClip sonidoPuertaAbrir;
+    public AudioClip sonidoSinLlave; 
 
     private bool estaAbierta = false;
     private bool estaAbriendose = false;
@@ -18,6 +28,13 @@ public class PuertaConLlave : MonoBehaviour
     {
         rotacionCerrada = transform.rotation;
         rotacionAbierta = rotacionCerrada * Quaternion.Euler(0, -anguloApertura, 0);
+
+        // Configurar AudioSource si no existe
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
 
         ActualizarMensaje();
     }
@@ -88,6 +105,12 @@ public class PuertaConLlave : MonoBehaviour
         else
         {
             Debug.Log(mensajeSinLlave);
+
+            // Reproducir sonido cuando no tiene llave (opcional)
+            if (sonidoSinLlave != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(sonidoSinLlave);
+            }
         }
     }
 
@@ -108,5 +131,10 @@ public class PuertaConLlave : MonoBehaviour
     {
         Debug.Log("¡Puerta abierta!");
         estaAbriendose = true;
+
+        if (sonidoPuertaAbrir != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(sonidoPuertaAbrir);
+        }
     }
 }

@@ -3,12 +3,35 @@ using UnityEngine;
 public class ObjetoRecolectable : MonoBehaviour
 {
     public string nombreObjeto = "Objeto";
-
     [HideInInspector] public bool estaEnInventario = false;
     [HideInInspector] public bool yaFueColocado = false;
 
+    [Header("Sonido (solo para objetos con tag 'Llave')")]
+    public AudioClip sonidoRecoger;
+    [Range(0f, 1f)]
+    public float volumenSonido = 1f;
+
     public void GuardarEnInventario()
     {
+        if (CompareTag("Llave"))
+        {
+            Debug.Log($"[Llave] Objeto tiene tag 'Llave': {gameObject.name}");
+
+            if (sonidoRecoger != null)
+            {
+                Debug.Log($"[Llave] Reproduciendo sonido en posición: {transform.position}");
+                AudioSource.PlayClipAtPoint(sonidoRecoger, transform.position, volumenSonido);
+            }
+            else
+            {
+                Debug.LogWarning($"[Llave] NO hay AudioClip asignado en '{nombreObjeto}'");
+            }
+        }
+        else
+        {
+            Debug.Log($"[Recolectable] Objeto '{nombreObjeto}' NO tiene tag 'Llave' (Tag actual: {tag})");
+        }
+
         estaEnInventario = true;
         yaFueColocado = false;
 
@@ -39,7 +62,6 @@ public class ObjetoRecolectable : MonoBehaviour
         yaFueColocado = true;
 
         gameObject.SetActive(true);
-
         transform.SetParent(destino);
         transform.position = destino.position;
         transform.rotation = destino.rotation;
@@ -48,7 +70,6 @@ public class ObjetoRecolectable : MonoBehaviour
         foreach (Renderer rend in renderers)
             rend.enabled = true;
 
-        // Los dejamos apagados para que no se vuelva a recolectar por proximidad
         Collider[] colliders = GetComponentsInChildren<Collider>(true);
         foreach (Collider col in colliders)
             col.enabled = false;

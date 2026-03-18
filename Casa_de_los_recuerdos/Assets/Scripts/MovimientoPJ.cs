@@ -13,6 +13,12 @@ public class MovimientoPJ : MonoBehaviour
     public float velocidadAgachado;
     public bool puedoSaltar;
 
+    public AudioSource audioSource;
+    public AudioClip sonidoPaso;
+    public AudioClip sonidoSalto;
+    public float intervaloEntrepasos = 0.5f;
+    private float tiempoUltimoPaso;
+
     private float velocidadInicial;
     private bool estaAgachado = false;
     private bool enSombra = false;
@@ -42,6 +48,13 @@ public class MovimientoPJ : MonoBehaviour
         velocidadAgachado = velocidadNormal * 0.5f;
 
         ActualizarVelocidad();
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.loop = false;
+        audioSource.playOnAwake = false;
     }
 
     void Update()
@@ -74,6 +87,18 @@ public class MovimientoPJ : MonoBehaviour
         if (puedoSaltar && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             Saltar();
+        }
+
+        if (puedoSaltar && (x != 0f || y != 0f))
+        {
+            if (Time.time - tiempoUltimoPaso >= intervaloEntrepasos)
+            {
+                if (sonidoPaso != null && audioSource != null)
+                {
+                    audioSource.PlayOneShot(sonidoPaso);
+                    tiempoUltimoPaso = Time.time;
+                }
+            }
         }
     }
 
@@ -114,6 +139,11 @@ public class MovimientoPJ : MonoBehaviour
         anim.SetBool("salte", true);
         anim.SetBool("tocoSuelo", false);
         rb.AddForce(Vector3.up * fuerzaDeSalto, ForceMode.Impulse);
+
+        if (sonidoSalto != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(sonidoSalto);
+        }
     }
 
     bool EstaEncimaDelObjeto(Collision collision)

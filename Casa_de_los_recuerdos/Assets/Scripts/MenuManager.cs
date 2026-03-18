@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
@@ -13,11 +14,53 @@ public class MenuManager : MonoBehaviour
     public GameObject panelControles;
     public GameObject panelCreditos;
 
+    [Header("Audio")]
+    public AudioSource musicaFondo;
+    public AudioSource efectosSonido;
+    public Slider sliderMusica;
+    public Slider sliderSonido;
     void Start()
     {
+        // Conectar eventos de sliders automáticamente
+        if (sliderMusica != null)
+            sliderMusica.onValueChanged.AddListener(CambiarVolumenMusica);
+
+        if (sliderSonido != null)
+            sliderSonido.onValueChanged.AddListener(CambiarVolumenSonido);
+
+        CargarPreferencias();
         MostrarMenuPrincipal();
     }
+    void CargarPreferencias()
+    {
+        float volumenMusica = PlayerPrefs.GetFloat("VolumenMusica", 0.5f);
+        if (musicaFondo != null)
+            musicaFondo.volume = volumenMusica;
+        if (sliderMusica != null)
+            sliderMusica.value = volumenMusica;
 
+        float volumenSonido = PlayerPrefs.GetFloat("VolumenSonido", 0.5f);
+        if (efectosSonido != null)
+            efectosSonido.volume = volumenSonido;
+        if (sliderSonido != null)
+            sliderSonido.value = volumenSonido;
+    }
+    public void CambiarVolumenMusica(float volumen)
+    {
+        if (musicaFondo != null)
+            musicaFondo.volume = volumen;
+        PlayerPrefs.SetFloat("VolumenMusica", volumen);
+    }
+
+    public void CambiarVolumenSonido(float volumen)
+    {
+        if (efectosSonido != null)
+            efectosSonido.volume = volumen;
+        PlayerPrefs.SetFloat("VolumenSonido", volumen);
+
+        if (efectosSonido != null && !efectosSonido.isPlaying)
+            efectosSonido.Play();
+    }
     void DesactivarTodo()
     {
         menuPrincipal.SetActive(false);
