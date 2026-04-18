@@ -2,16 +2,34 @@ using UnityEngine;
 
 public class CamaraSeguir : MonoBehaviour
 {
-    public Transform objetivo;
     public Vector3 offset = new Vector3(0f, 5f, 7f);
     public float suavidad = 5f;
 
+    private Transform objetivo;
+
     void LateUpdate()
     {
+        BuscarPlayerActivo();
+
         if (!objetivo) return;
 
-        // Sigue la posición del personaje + offset fijo, ignora su rotación
-        transform.position = Vector3.Lerp(transform.position, objetivo.position + offset, suavidad * Time.deltaTime);
+        Vector3 posicionDeseada = objetivo.position + offset;
+        transform.position = Vector3.Lerp(transform.position, posicionDeseada, suavidad * Time.deltaTime);
+
         transform.LookAt(objetivo);
+    }
+
+    void BuscarPlayerActivo()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject p in players)
+        {
+            if (p.activeInHierarchy)
+            {
+                objetivo = p.transform;
+                return;
+            }
+        }
     }
 }
