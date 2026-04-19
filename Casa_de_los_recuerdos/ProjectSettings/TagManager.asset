@@ -8,6 +8,7 @@ TagManager:
   - Empujable
   - Recolectable
   - Interactuable
+  - Rompible
   layers:
   - Default
   - TransparentFX

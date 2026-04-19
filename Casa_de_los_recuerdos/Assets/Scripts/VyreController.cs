@@ -11,8 +11,9 @@ public class VyreController : MonoBehaviour
 
     [Header("Salto")]
     public float fuerzaDeSalto = 8f;
-    public int maxSaltos = 2;
     public bool puedoSaltar;
+    private int saltosRealizados = 0;
+    public int maxSaltos = 2; 
 
     [Header("Empujar")]
     public float fuerzaEmpuje = 5f;
@@ -24,20 +25,21 @@ public class VyreController : MonoBehaviour
     public float intervaloEntrepasos = 0.5f;
     private float tiempoUltimoPaso;
 
-    [Header("Configuración")]
-    public LayerMask capaSuelo;
+    [Header("Animación")]
+    public float duracionAnimacionPuno = 0.8f;
 
-    // Referencias
+    public LayerMask capaSuelo;
+    public ColisionPuno colisionPuno;
+
     private Rigidbody rb;
     private Animator anim;
 
-    // Variables privadas
     private float x, y;
-    private int saltosRestantes;
     private float velocidadMovimiento;
     private bool estaEmpujando = false;
     private bool estaRompiendo = false;
     private Rigidbody objetoEmpujado = null;
+    private GameObject objetoRompibleCercano = null;
 
     private float umbralColisionVertical = 0.7f;
     private float offsetAlturaMinima = 0.3f;
@@ -48,21 +50,17 @@ public class VyreController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         rb.constraints = RigidbodyConstraints.FreezeRotation;
-
         velocidadMovimiento = velocidadNormal;
-        saltosRestantes = maxSaltos;
 
         if (audioSource == null)
-        {
             audioSource = gameObject.AddComponent<AudioSource>();
-        }
+
         audioSource.loop = false;
         audioSource.playOnAwake = false;
     }
 
     void Update()
     {
-        // INPUT
         x = 0f;
         y = 0f;
 
@@ -72,52 +70,31 @@ public class VyreController : MonoBehaviour
         if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) y = -1f;
         else if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) y = 1f;
 
-        // ANIMACIONES
-        anim.SetFloat("VelX", x);
-        anim.SetFloat("VelY", y);
-        anim.SetBool("estaEmpujando", estaEmpujando);
-        anim.SetBool("romper", estaRompiendo);
+        if (anim != null)
+        {
+            anim.SetFloat("VelX", x);
+            anim.SetFloat("VelY", y);
+            anim.SetBool("estaEmpujando", estaEmpujando);
+            anim.SetBool("romper", estaRompiendo);
+        }
 
-        // 🏃 CORRER
         if (Keyboard.current.leftShiftKey.isPressed)
             velocidadMovimiento = velocidadCorrer;
         else
             velocidadMovimiento = velocidadNormal;
 
-        // 👊 EMPUJAR con V
-        if (Keyboard.current.vKey.wasPressedThisFrame && objetoEmpujado != null)
-        {
-            estaEmpujando = true;
-        }
-        else if (Keyboard.current.vKey.wasReleasedThisFrame)
-        {
-            estaEmpujando = false;
-        }
-
-        // 💥 PUÑO/ROMPER con B
+        // romper
         if (Keyboard.current.bKey.wasPressedThisFrame && !estaRompiendo)
         {
             estaRompiendo = true;
+            if (colisionPuno != null) colisionPuno.ActivarPuno(); 
             StartCoroutine(ResetRomper());
         }
 
-        // 🦘 SALTO
-        if (puedoSaltar && Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
+        // dobleSalto
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && saltosRealizados < maxSaltos)
             Saltar();
-        }
-        // 🦘 DOBLE SALTO
-        else if (!puedoSaltar && Keyboard.current.spaceKey.wasPressedThisFrame && saltosRestantes > 0)
-        {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-            rb.AddForce(Vector3.up * fuerzaDeSalto, ForceMode.Impulse);
-            saltosRestantes--;
 
-            if (sonidoSalto != null && audioSource != null)
-                audioSource.PlayOneShot(sonidoSalto);
-        }
-
-        // SONIDO DE PASOS
         if (puedoSaltar && (x != 0f || y != 0f))
         {
             if (Time.time - tiempoUltimoPaso >= intervaloEntrepasos)
@@ -148,62 +125,61 @@ public class VyreController : MonoBehaviour
 
         if (movimiento != Vector3.zero)
         {
-            Vector3 nuevaPosicion = rb.position + movimiento;
-            rb.MovePosition(nuevaPosicion);
-
+            rb.MovePosition(rb.position + movimiento);
             Quaternion targetRotation = Quaternion.LookRotation(movimiento);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
 
-        // EMPUJAR OBJETOS
         if (estaEmpujando && objetoEmpujado != null && movimiento != Vector3.zero)
-        {
-            Vector3 direccionEmpuje = movimiento.normalized;
-            objetoEmpujado.AddForce(direccionEmpuje * fuerzaEmpuje, ForceMode.Force);
-        }
+            objetoEmpujado.AddForce(movimiento.normalized * fuerzaEmpuje, ForceMode.Force);
     }
 
     void Saltar()
     {
-        puedoSaltar = false;
-        saltosRestantes = maxSaltos - 1;
-        anim.SetBool("salte", true);
-        anim.SetBool("tocoSuelo", false);
+        saltosRealizados++;
+
+        if (anim != null)
+        {
+            anim.SetBool("salte", true);
+            anim.SetBool("tocoSuelo", false);
+        }
+
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * fuerzaDeSalto, ForceMode.Impulse);
 
         if (sonidoSalto != null && audioSource != null)
             audioSource.PlayOneShot(sonidoSalto);
     }
 
-    // ← Fuera del OnCollisionEnter, al mismo nivel que los demás métodos
     IEnumerator ResetRomper()
     {
-        yield return new WaitForSeconds(0.5f); // ← Ajusta según dure tu animación
+        yield return new WaitForSeconds(duracionAnimacionPuno);
         estaRompiendo = false;
+        if (colisionPuno != null) colisionPuno.DesactivarPuno(); 
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        // DETECCIÓN DE SUELO
         if (((1 << collision.gameObject.layer) & capaSuelo) != 0)
         {
             puedoSaltar = true;
-            saltosRestantes = maxSaltos;
-            anim.SetBool("salte", false);
-            anim.SetBool("tocoSuelo", true);
+            saltosRealizados = 0; 
+
+            if (anim != null)
+            {
+                anim.SetBool("salte", false);
+                anim.SetBool("tocoSuelo", true);
+            }
         }
 
-        // 💥 ROMPER OBJETOS (solo si está presionando B)
         if (collision.gameObject.CompareTag("Rompible") && estaRompiendo)
-        {
-            Destroy(collision.gameObject, 0.5f);
-        }
+            objetoRompibleCercano = collision.gameObject;
 
-        // 📦 REGISTRAR OBJETO EMPUJABLE
         if (collision.gameObject.CompareTag("Empujable"))
         {
             if (!EstaEncimaDelObjeto(collision))
             {
+                estaEmpujando = true;
                 objetoEmpujado = collision.gameObject.GetComponent<Rigidbody>();
             }
         }
@@ -212,9 +188,7 @@ public class VyreController : MonoBehaviour
     void OnCollisionExit(Collision collision)
     {
         if (((1 << collision.gameObject.layer) & capaSuelo) != 0)
-        {
             puedoSaltar = false;
-        }
 
         if (collision.gameObject.CompareTag("Empujable"))
         {
@@ -225,6 +199,9 @@ public class VyreController : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
+        if (collision.gameObject.CompareTag("Rompible") && estaRompiendo)
+            objetoRompibleCercano = collision.gameObject;
+
         if (collision.gameObject.CompareTag("Empujable"))
         {
             bool estaEncima = EstaEncimaDelObjeto(collision);
@@ -236,6 +213,7 @@ public class VyreController : MonoBehaviour
             }
             else if (!estaEncima && !estaEmpujando)
             {
+                estaEmpujando = true;
                 objetoEmpujado = collision.gameObject.GetComponent<Rigidbody>();
             }
         }
@@ -257,5 +235,11 @@ public class VyreController : MonoBehaviour
         }
 
         return false;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = puedoSaltar ? Color.green : Color.red;
+        Gizmos.DrawWireSphere(transform.position, 0.3f);
     }
 }
