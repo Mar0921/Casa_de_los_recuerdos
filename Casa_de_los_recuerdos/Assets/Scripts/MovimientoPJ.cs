@@ -6,7 +6,6 @@ public class MovimientoPJ : MonoBehaviour
     public float velocidadMovimiento = 5f;
     public float velocidadRotacion = 200f;
     public float fuerzaDeSalto = 8f;
-    public float fuerzaEmpuje = 5f;
 
     public float velocidadNormal = 5f;
     public float velocidadEnSombra = 1f;
@@ -26,8 +25,6 @@ public class MovimientoPJ : MonoBehaviour
     private Rigidbody rb;
     private Animator anim;
     private float x, y;
-    private bool estaEmpujando = false;
-    private Rigidbody objetoEmpujado = null;
     public LayerMask capaSuelo;
 
     private float umbralColisionVertical = 0.7f;
@@ -46,13 +43,11 @@ public class MovimientoPJ : MonoBehaviour
             velocidadNormal = velocidadInicial;
 
         velocidadAgachado = velocidadNormal * 0.5f;
-
         ActualizarVelocidad();
 
         if (audioSource == null)
-        {
             audioSource = gameObject.AddComponent<AudioSource>();
-        }
+
         audioSource.loop = false;
         audioSource.playOnAwake = false;
     }
@@ -70,24 +65,17 @@ public class MovimientoPJ : MonoBehaviour
 
         anim.SetFloat("VelX", x);
         anim.SetFloat("VelY", y);
-        anim.SetBool("estaEmpujando", estaEmpujando);
 
         if (puedoSaltar)
-        {
             estaAgachado = Keyboard.current.rKey.isPressed;
-        }
         else
-        {
             estaAgachado = false;
-        }
 
         anim.SetBool("agachado", estaAgachado);
         ActualizarVelocidad();
 
         if (puedoSaltar && Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
             Saltar();
-        }
 
         if (puedoSaltar && (x != 0f || y != 0f))
         {
@@ -119,17 +107,9 @@ public class MovimientoPJ : MonoBehaviour
 
         if (movimiento != Vector3.zero)
         {
-            Vector3 nuevaPosicion = rb.position + movimiento;
-            rb.MovePosition(nuevaPosicion);
-
+            rb.MovePosition(rb.position + movimiento);
             Quaternion targetRotation = Quaternion.LookRotation(movimiento);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
-        }
-
-        if (estaEmpujando && objetoEmpujado != null && movimiento != Vector3.zero)
-        {
-            Vector3 direccionEmpuje = movimiento.normalized;
-            objetoEmpujado.AddForce(direccionEmpuje * fuerzaEmpuje, ForceMode.Force);
         }
     }
 
@@ -141,31 +121,7 @@ public class MovimientoPJ : MonoBehaviour
         rb.AddForce(Vector3.up * fuerzaDeSalto, ForceMode.Impulse);
 
         if (sonidoSalto != null && audioSource != null)
-        {
             audioSource.PlayOneShot(sonidoSalto);
-        }
-    }
-
-    bool EstaEncimaDelObjeto(Collision collision)
-    {
-        Bounds cajaBounds = collision.collider.bounds;
-        float topeDeCaja = cajaBounds.max.y;
-        float basePJ = transform.position.y - GetComponent<Collider>().bounds.extents.y;
-
-        if (basePJ >= topeDeCaja - offsetAlturaMinima)
-        {
-            return true;
-        }
-
-        foreach (ContactPoint contacto in collision.contacts)
-        {
-            if (contacto.normal.y > umbralColisionVertical)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -176,65 +132,33 @@ public class MovimientoPJ : MonoBehaviour
             anim.SetBool("salte", false);
             anim.SetBool("tocoSuelo", true);
         }
-
-        if (collision.gameObject.CompareTag("Empujable"))
-        {
-            if (!EstaEncimaDelObjeto(collision))
-            {
-                estaEmpujando = true;
-                objetoEmpujado = collision.gameObject.GetComponent<Rigidbody>();
-            }
-        }
     }
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Empujable"))
+        Rigidbody rbObjeto = collision.gameObject.GetComponent<Rigidbody>();
+        if (rbObjeto != null)
         {
-            bool estaEncima = EstaEncimaDelObjeto(collision);
-
-            if (estaEncima && estaEmpujando)
-            {
-                estaEmpujando = false;
-                objetoEmpujado = null;
-            }
-            else if (!estaEncima && !estaEmpujando)
-            {
-                estaEmpujando = true;
-                objetoEmpujado = collision.gameObject.GetComponent<Rigidbody>();
-            }
+            rbObjeto.linearVelocity = Vector3.zero;
         }
     }
 
     void OnCollisionExit(Collision collision)
     {
         if (((1 << collision.gameObject.layer) & capaSuelo) != 0)
-        {
             puedoSaltar = false;
-        }
-
-        if (collision.gameObject.CompareTag("Empujable"))
-        {
-            estaEmpujando = false;
-            objetoEmpujado = null;
-        }
     }
 
     void ActualizarVelocidad()
     {
         float velocidadBase = enSombra ? velocidadEnSombra : velocidadNormal;
-
-        if (estaAgachado)
-            velocidadMovimiento = velocidadBase * 0.5f;
-        else
-            velocidadMovimiento = velocidadBase;
+        velocidadMovimiento = estaAgachado ? velocidadBase * 0.5f : velocidadBase;
     }
 
     public void EnSombra(bool activo)
     {
         enSombra = activo;
         ActualizarVelocidad();
-
         Debug.Log("EnSombra: " + activo + " | Velocidad: " + velocidadMovimiento);
     }
 }

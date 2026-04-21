@@ -16,7 +16,7 @@ public class VyreController : MonoBehaviour
     public int maxSaltos = 2; 
 
     [Header("Empujar")]
-    public float fuerzaEmpuje = 5f;
+    public float fuerzaEmpuje = 30f;
 
     [Header("Audio")]
     public AudioSource audioSource;
@@ -55,8 +55,8 @@ public class VyreController : MonoBehaviour
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
 
-        audioSource.loop = false;
-        audioSource.playOnAwake = false;
+        audioSource.loop = true;
+        audioSource.playOnAwake = true;
     }
 
     void Update()
