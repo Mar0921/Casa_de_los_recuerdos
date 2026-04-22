@@ -13,7 +13,8 @@ public class VyreController : MonoBehaviour
     public float fuerzaDeSalto = 8f;
     public bool puedoSaltar;
     private int saltosRealizados = 0;
-    public int maxSaltos = 2; 
+    public int maxSaltos = 2;
+    private bool dobleSaltoActivado = false; // Bandera para evitar activar múltiples veces
 
     [Header("Empujar")]
     public float fuerzaEmpuje = 30f;
@@ -27,6 +28,7 @@ public class VyreController : MonoBehaviour
 
     [Header("Animación")]
     public float duracionAnimacionPuno = 0.8f;
+    public float duracionAnimacionDobleSalto = 0.5f; // Ajusta según la duración de tu animación de doble salto
 
     public LayerMask capaSuelo;
     public ColisionPuno colisionPuno;
@@ -39,7 +41,7 @@ public class VyreController : MonoBehaviour
     private bool estaEmpujando = false;
     private bool estaRompiendo = false;
     private Rigidbody objetoEmpujado = null;
-    private GameObject objetoRompibleCercano = null;
+    private GameObject objetoRombibleCercano = null;
 
     private float umbralColisionVertical = 0.7f;
     private float offsetAlturaMinima = 0.3f;
@@ -87,11 +89,11 @@ public class VyreController : MonoBehaviour
         if (Keyboard.current.bKey.wasPressedThisFrame && !estaRompiendo)
         {
             estaRompiendo = true;
-            if (colisionPuno != null) colisionPuno.ActivarPuno(); 
+            if (colisionPuno != null) colisionPuno.ActivarPuno();
             StartCoroutine(ResetRomper());
         }
 
-        // dobleSalto
+        // doble salto con Bool
         if (Keyboard.current.spaceKey.wasPressedThisFrame && saltosRealizados < maxSaltos)
             Saltar();
 
@@ -140,6 +142,15 @@ public class VyreController : MonoBehaviour
 
         if (anim != null)
         {
+            // Si es el segundo salto y aún no se ha activado el doble salto
+            if (saltosRealizados == 2 && !dobleSaltoActivado)
+            {
+                anim.SetBool("SaltarOtravez", true);
+                dobleSaltoActivado = true;
+                // Desactivar el bool después de la duración de la animación de doble salto
+                StartCoroutine(DesactivarDobleSalto());
+            }
+
             anim.SetBool("salte", true);
             anim.SetBool("tocoSuelo", false);
         }
@@ -151,11 +162,18 @@ public class VyreController : MonoBehaviour
             audioSource.PlayOneShot(sonidoSalto);
     }
 
+    IEnumerator DesactivarDobleSalto()
+    {
+        yield return new WaitForSeconds(duracionAnimacionDobleSalto);
+        if (anim != null)
+            anim.SetBool("SaltarOtravez", false);
+    }
+
     IEnumerator ResetRomper()
     {
         yield return new WaitForSeconds(duracionAnimacionPuno);
         estaRompiendo = false;
-        if (colisionPuno != null) colisionPuno.DesactivarPuno(); 
+        if (colisionPuno != null) colisionPuno.DesactivarPuno();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -163,17 +181,20 @@ public class VyreController : MonoBehaviour
         if (((1 << collision.gameObject.layer) & capaSuelo) != 0)
         {
             puedoSaltar = true;
-            saltosRealizados = 0; 
+            saltosRealizados = 0;
+            dobleSaltoActivado = false; // Resetear bandera al tocar suelo
 
             if (anim != null)
             {
                 anim.SetBool("salte", false);
                 anim.SetBool("tocoSuelo", true);
+                // Asegurar que el bool de doble salto quede apagado al tocar suelo
+                anim.SetBool("SaltarOtravez", false);
             }
         }
 
         if (collision.gameObject.CompareTag("Rompible") && estaRompiendo)
-            objetoRompibleCercano = collision.gameObject;
+            objetoRombibleCercano = collision.gameObject;
 
         if (collision.gameObject.CompareTag("Empujable"))
         {
@@ -200,7 +221,7 @@ public class VyreController : MonoBehaviour
     void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Rompible") && estaRompiendo)
-            objetoRompibleCercano = collision.gameObject;
+            objetoRombibleCercano = collision.gameObject;
 
         if (collision.gameObject.CompareTag("Empujable"))
         {
