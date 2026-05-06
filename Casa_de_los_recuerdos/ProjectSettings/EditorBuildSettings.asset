@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/1nivelCocina.unity
     guid: d4021abf4ad9b8443b37f03b1cf78f42
   - enabled: 1
-    path: Assets/Scenes/Pasillo.unity
+    path: Assets/Scenes/Pasillo1.unity
     guid: 6c5fab2a032ced647b147cb772512284
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

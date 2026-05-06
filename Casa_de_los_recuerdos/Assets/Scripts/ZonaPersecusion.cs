@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ZonaPersecucion : MonoBehaviour
 {
@@ -9,6 +9,11 @@ public class ZonaPersecucion : MonoBehaviour
     [Header("UI opcional")]
     public GameObject panelPersecucion;
 
+    [Header("Configuración")]
+    public bool desactivarTriggerAlActivar = true; // 
+
+    private bool yaActivado = false;
+
     private void Start()
     {
         if (panelPersecucion != null)
@@ -17,11 +22,12 @@ public class ZonaPersecucion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (yaActivado) return; // ⬅️ Solo primera vez
+
         Transform jugador = ObtenerJugador(other);
+        if (jugador == null) return;
 
-        if (jugador == null)
-            return;
-
+        // Activar persecución una sola vez
         if (monstruo != null)
         {
             monstruo.ActivarPersecucion(jugador, puntoAparicionMonstruo);
@@ -30,7 +36,16 @@ public class ZonaPersecucion : MonoBehaviour
         if (panelPersecucion != null)
             panelPersecucion.SetActive(true);
 
-        Debug.Log("[ZonaPersecucion] El jugador entr� a la zona de persecuci�n.");
+        yaActivado = true;
+
+        if (desactivarTriggerAlActivar)
+        {
+            // Desactivar el trigger para que no vuelva a entrar mientras se persigue
+            Collider col = GetComponent<Collider>();
+            if (col != null) col.enabled = false;
+        }
+
+        Debug.Log("[ZonaPersecucion] Persecución activada (solo una vez).");
     }
 
     private Transform ObtenerJugador(Collider other)
