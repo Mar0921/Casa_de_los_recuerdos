@@ -124,68 +124,113 @@ public class CambioPersonaje : MonoBehaviour
 
     IEnumerator EfectoCambio(GameObject personaje, bool desaparecer)
     {
-        Renderer[] renderers = personaje.GetComponentsInChildren<Renderer>();
+        // Obtener todos los renderers actuales
+        Renderer[] todosRenderers = personaje.GetComponentsInChildren<Renderer>();
 
-        if (renderers.Length > 0)
+        // Filtrar solo los que existen y no están siendo destruidos
+        var renderersValidos = new System.Collections.Generic.List<Renderer>();
+        var coloresOriginales = new System.Collections.Generic.List<Color>();
+
+        for (int i = 0; i < todosRenderers.Length; i++)
         {
-            float tiempo = 0.2f;
-            float t = 0;
-
-            Color[] coloresOriginales = new Color[renderers.Length];
-            for (int i = 0; i < renderers.Length; i++)
+            if (todosRenderers[i] != null && todosRenderers[i].gameObject != null)
             {
-                coloresOriginales[i] = renderers[i].material.color;
-            }
-
-            if (desaparecer)
-            {
-                while (t < tiempo)
+                try
                 {
-                    t += Time.deltaTime;
-                    float alpha = Mathf.Lerp(1f, 0f, t / tiempo);
-
-                    for (int i = 0; i < renderers.Length; i++)
-                    {
-                        Color c = coloresOriginales[i];
-                        renderers[i].material.color = new Color(c.r, c.g, c.b, alpha);
-                    }
-
-                    yield return null;
+                    Color col = ObtenerColor(todosRenderers[i].material);
+                    renderersValidos.Add(todosRenderers[i]);
+                    coloresOriginales.Add(col);
+                }
+                catch (System.Exception)
+                {
+                    // Si el material no es accesible, ignorar este renderer
+                    continue;
                 }
             }
-            else
+        }
+
+        if (renderersValidos.Count == 0)
+        {
+            yield return new WaitForSeconds(0.2f);
+            yield break;
+        }
+
+        float tiempo = 0.2f;
+        float t = 0;
+
+        if (desaparecer)
+        {
+            while (t < tiempo)
             {
-                for (int i = 0; i < renderers.Length; i++)
+                t += Time.deltaTime;
+                float alpha = Mathf.Lerp(1f, 0f, t / tiempo);
+
+                for (int i = 0; i < renderersValidos.Count; i++)
                 {
+                    if (renderersValidos[i] == null) continue;
                     Color c = coloresOriginales[i];
-                    renderers[i].material.color = new Color(c.r, c.g, c.b, 0f);
+                    c.a = alpha;
+                    AsignarColor(renderersValidos[i].material, c);
                 }
-
-                while (t < tiempo)
-                {
-                    t += Time.deltaTime;
-                    float alpha = Mathf.Lerp(0f, 1f, t / tiempo);
-
-                    for (int i = 0; i < renderers.Length; i++)
-                    {
-                        Color c = coloresOriginales[i];
-                        renderers[i].material.color = new Color(c.r, c.g, c.b, alpha);
-                    }
-
-                    yield return null;
-                }
-            }
-
-            float alphaFinal = desaparecer ? 0f : 1f;
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                Color c = coloresOriginales[i];
-                renderers[i].material.color = new Color(c.r, c.g, c.b, alphaFinal);
+                yield return null;
             }
         }
         else
         {
-            yield return new WaitForSeconds(0.2f);
+            // Fijar alpha 0 al inicio
+            for (int i = 0; i < renderersValidos.Count; i++)
+            {
+                if (renderersValidos[i] == null) continue;
+                Color c = coloresOriginales[i];
+                c.a = 0f;
+                AsignarColor(renderersValidos[i].material, c);
+            }
+
+            while (t < tiempo)
+            {
+                t += Time.deltaTime;
+                float alpha = Mathf.Lerp(0f, 1f, t / tiempo);
+
+                for (int i = 0; i < renderersValidos.Count; i++)
+                {
+                    if (renderersValidos[i] == null) continue;
+                    Color c = coloresOriginales[i];
+                    c.a = alpha;
+                    AsignarColor(renderersValidos[i].material, c);
+                }
+                yield return null;
+            }
         }
+
+        // Restaurar alpha final
+        float alphaFinal = desaparecer ? 0f : 1f;
+        for (int i = 0; i < renderersValidos.Count; i++)
+        {
+            if (renderersValidos[i] == null) continue;
+            Color c = coloresOriginales[i];
+            c.a = alphaFinal;
+            AsignarColor(renderersValidos[i].material, c);
+        }
+    }
+
+    // Método auxiliar para obtener color según el shader
+    private Color ObtenerColor(Material mat)
+    {
+        if (mat.HasProperty("_Color"))
+            return mat.GetColor("_Color");
+        else if (mat.HasProperty("_TintColor"))
+            return mat.GetColor("_TintColor");
+        else
+            return Color.white; // fallback
+    }
+
+    // Método auxiliar para asignar color según el shader
+    private void AsignarColor(Material mat, Color color)
+    {
+        if (mat.HasProperty("_Color"))
+            mat.SetColor("_Color", color);
+        else if (mat.HasProperty("_TintColor"))
+            mat.SetColor("_TintColor", color);
+        // Si no tiene ninguna, no se puede cambiar el color, pero evitamos error
     }
 }

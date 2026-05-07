@@ -3652,6 +3652,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84d3477d5a36664185d1c0c7a090274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ColisionPuno
+  particulaRotura: {fileID: 1429954232896169633, guid: 2b434f7bdd12b4d4ba9ffb4af1b8c75b, type: 3}
+  sonidoRotura: {fileID: 8300000, guid: 63f821c435a808a4ebb3847659dbba5e, type: 3}
+  tiempoDestruirParticulas: 2
 --- !u!136 &597623201
 CapsuleCollider:
   m_ObjectHideFlags: 0

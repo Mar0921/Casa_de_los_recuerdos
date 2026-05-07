@@ -9,6 +9,8 @@ TagManager:
   - Recolectable
   - Interactuable
   - Rompible
+  - FxTemporaire
+  - Estrella
   layers:
   - Default
   - TransparentFX
