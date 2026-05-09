@@ -681,15 +681,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4.708868
+      value: 8.819197
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
       propertyPath: m_LocalScale.y
-      value: 4.708868
+      value: 8.819197
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
       propertyPath: m_LocalScale.z
-      value: 4.708868
+      value: 8.819197
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -730,6 +730,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8016543926342057949, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -779,6 +783,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: c136afa7b01fcae419e44c01a631e149, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 50a509a15df3d3242bb68a5837633504, type: 2}
     - target: {fileID: 7061312835978283474, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -796,6 +804,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 592816287}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 592816288}
   m_SourcePrefab: {fileID: 100100000, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
 --- !u!1 &592816282 stripped
 GameObject:
@@ -815,18 +826,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonstruoPerseguir
   agent: {fileID: 592816284}
-  animator: {fileID: 0}
+  animator: {fileID: 592816289}
+  screamControllerJugador: {fileID: 592816288}
   modeloVisual: {fileID: 592816282}
   ocultoAlIniciar: 1
   distanciaMinimaActualizacion: 0.2
+  baseOffset: 0
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   playerTag: Player
   duracionFade: 1
   delayAntesFade: 2
   pantallaFade: {fileID: 309948853}
   nombreEscenaReinicio: Pasillo1
+  paramVelocidad: Velocidad
+  usarBoolEnVezDeFloat: 1
+  paramAtaque: Atacar
+  monstruoTieneAnimAtaque: 0
 --- !u!195 &592816284
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -872,6 +889,23 @@ CapsuleCollider:
   m_Height: 1.2421283
   m_Direction: 1
   m_Center: {x: 0, y: 0.53629106, z: -0.02329712}
+--- !u!114 &592816288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592816282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb64095c006d14b4ba7c7a5e08486d8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Screamcontroller
+--- !u!95 &592816289 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 59c419b087e889d4b82fda36d2b53dc5, type: 3}
+  m_PrefabInstance: {fileID: 592816281}
+  m_PrefabAsset: {fileID: 0}
 --- !u!64 &623746318
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2553,14 +2587,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LuzPersonaje
   luz: {fileID: 844543771}
-  animator: {fileID: 1654109534}
-  audioSource: {fileID: 1654109538}
-  sonidoLuz: {fileID: 8300000, guid: 3cb1dee51ec34174091ab3e8c46684e4, type: 3}
   intensidadMax: 30
   duracionLuz: 6
   cooldown: 20
   velocidadTransicion: 6
+  animator: {fileID: 1654109534}
   tiempoAnimacion: 1.5
+  audioSource: {fileID: 1654109538}
+  sonidoLuz: {fileID: 8300000, guid: 3cb1dee51ec34174091ab3e8c46684e4, type: 3}
+  radioEstrellas: 5
+  tiempoBrilloEstrella: 2
 --- !u!82 &1654109538
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3830,7 +3866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CambioPersonaje
   lumen: {fileID: 1654109533}
-  vyre: {fileID: 0}
+  vyre: {fileID: 1044746702}
   cooldown: 2
 --- !u!114 &2060546947
 MonoBehaviour:
