@@ -1,12 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class FinalNivel : MonoBehaviour
 {
     [Header("Puerta")]
     public string nombreLlaveRequerida = "Llave";
     public float anguloApertura = 90f;
-    public float velocidadApertura = 2f;
+    public float velocidadApertura = 5f;
     public AudioSource audioSource;
     public AudioClip sonidoPuertaAbrir;
     public AudioClip sonidoSinLlave;
@@ -14,19 +15,21 @@ public class FinalNivel : MonoBehaviour
     [Header("Luces")]
     public Light[] luces;
     public float intensidadMax = 3f;
-    public float velocidadTransicion = 1.5f;
+    public float velocidadTransicion = 5f;
 
     [Header("Imagen en el mundo")]
     public Renderer imagenMundo;
-    public float delayImagen = 2f;
-    public float velocidadFade = 1f;
+    public float delayImagen = 0.3f;
+    public float velocidadFade = 3f;
 
     [Header("Siguiente escena")]
     public string nombreEscena;
-    public float tiempoAntesDeCargar = 5f;
+    public float tiempoAntesDeCargar = 1f;
+    public float duracionFadeOut = 1f;  // Duración del fade a negro
 
     private bool estaAbierta = false;
     private bool estaAbriendose = false;
+    private bool yaIntentoAbrir = false;
     private Quaternion rotacionCerrada;
     private Quaternion rotacionAbierta;
 
@@ -35,10 +38,11 @@ public class FinalNivel : MonoBehaviour
     private float timerImagen = 0f;
     private float timerEscena = 0f;
     private Material mat;
+    private bool usarTintColor = false;
 
     private GameObject jugador;
-    private Renderer rendererJugador;
-    private bool jugadorDesapareciendo = false;
+    private Renderer[] renderersJugador;
+    private bool jugadorDentroTrigger = false;
 
     void Start()
     {
@@ -58,19 +62,30 @@ public class FinalNivel : MonoBehaviour
         if (imagenMundo != null)
         {
             mat = imagenMundo.material;
-            Color c = mat.color;
-            c.a = 0f;
-            mat.color = c;
+            if (mat.HasProperty("_Color"))
+            {
+                Color c = mat.GetColor("_Color");
+                c.a = 0f;
+                mat.SetColor("_Color", c);
+                usarTintColor = false;
+            }
+            else if (mat.HasProperty("_TintColor"))
+            {
+                Color c = mat.GetColor("_TintColor");
+                c.a = 0f;
+                mat.SetColor("_TintColor", c);
+                usarTintColor = true;
+            }
         }
 
         jugador = GameObject.FindGameObjectWithTag("Player");
         if (jugador != null)
-            rendererJugador = jugador.GetComponent<Renderer>();
+            renderersJugador = jugador.GetComponentsInChildren<Renderer>();
     }
 
     void Update()
     {
-        // Abrir puerta
+        // Animación de apertura
         if (estaAbriendose)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionAbierta, Time.deltaTime * velocidadApertura);
@@ -79,50 +94,72 @@ public class FinalNivel : MonoBehaviour
                 transform.rotation = rotacionAbierta;
                 estaAbriendose = false;
                 estaAbierta = true;
+                Debug.Log("Puerta abierta");
             }
         }
 
-        if (!estaAbierta && Input.GetKeyDown(KeyCode.P))
-            IntentarAbrirPuerta();
+        // Si la puerta está abierta y el jugador está dentro del trigger, activar final
+        if (estaAbierta && jugadorDentroTrigger && !finalActivado)
+        {
+            ActivarFinal();
+        }
 
-        // Final activado: luces, imagen, desvanecimiento jugador y cambio de escena
+        // Secuencia de final
         if (finalActivado)
         {
-            // Prender luces suavemente
+            // Luces
             foreach (Light luz in luces)
-                luz.intensity = Mathf.MoveTowards(luz.intensity, intensidadMax, velocidadTransicion * Time.deltaTime);
-
-            // Desvanecer jugador
-            if (jugadorDesapareciendo && rendererJugador != null)
             {
-                Color colorJugador = rendererJugador.material.color;
-                colorJugador.a = Mathf.MoveTowards(colorJugador.a, 0f, Time.deltaTime * 0.5f);
-                rendererJugador.material.color = colorJugador;
+                luz.intensity = Mathf.MoveTowards(luz.intensity, intensidadMax, velocidadTransicion * Time.deltaTime);
             }
 
-            // Delay antes de la imagen
+            // Desvanecer jugador
+            if (renderersJugador != null)
+            {
+                foreach (Renderer rend in renderersJugador)
+                {
+                    if (rend.material != null)
+                    {
+                        Color c = rend.material.color;
+                        c.a = Mathf.MoveTowards(c.a, 0f, Time.deltaTime * 1.5f);
+                        rend.material.color = c;
+                    }
+                }
+            }
+
+            // Delay antes de imagen
             if (!imagenActivada)
             {
                 timerImagen += Time.deltaTime;
                 if (timerImagen >= delayImagen)
+                {
                     imagenActivada = true;
+                }
             }
 
-            // Fade in imagen y cambio de escena
+            // Fade de imagen y carga de escena
             if (imagenActivada && mat != null)
             {
-                Color colorImagen = mat.color;
-                colorImagen.a = Mathf.MoveTowards(colorImagen.a, 1f, velocidadFade * Time.deltaTime);
-                mat.color = colorImagen;
+                Color col;
+                if (usarTintColor)
+                    col = mat.GetColor("_TintColor");
+                else
+                    col = mat.GetColor("_Color");
+                col.a = Mathf.MoveTowards(col.a, 1f, velocidadFade * Time.deltaTime);
+                if (usarTintColor)
+                    mat.SetColor("_TintColor", col);
+                else
+                    mat.SetColor("_Color", col);
 
-                Debug.Log("Alpha imagen: " + colorImagen.a);
-
-                if (colorImagen.a >= 1f)
+                if (col.a >= 0.99f)
                 {
                     timerEscena += Time.deltaTime;
-                    Debug.Log("Timer escena: " + timerEscena);
                     if (timerEscena >= tiempoAntesDeCargar)
-                        SceneManager.LoadScene(nombreEscena);
+                    {
+                        // Iniciar el fade out antes de cargar la escena
+                        StartCoroutine(FadeOutYCargarEscena());
+                        finalActivado = false; // Evitar que se ejecute múltiples veces
+                    }
                 }
             }
         }
@@ -130,30 +167,64 @@ public class FinalNivel : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger tocado por: " + other.name + " | estaAbierta: " + estaAbierta);
-        if (other.CompareTag("Player") && estaAbierta && !finalActivado)
+        if (other.CompareTag("Player"))
         {
-            finalActivado = true;
-            jugadorDesapareciendo = true;
-            Debug.Log("Final activado");
-            MovimientoPJ mov = other.GetComponent<MovimientoPJ>();
+            jugadorDentroTrigger = true;
+
+            if (!estaAbierta && !estaAbriendose && !yaIntentoAbrir)
+            {
+                IntentarAbrirPuerta();
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            jugadorDentroTrigger = false;
+        }
+    }
+
+    void ActivarFinal()
+    {
+        finalActivado = true;
+        Debug.Log("Final activado");
+
+        if (jugador != null)
+        {
+            MovimientoPJ mov = jugador.GetComponent<MovimientoPJ>();
             if (mov != null) mov.enabled = false;
+
+            VyreController vyre = jugador.GetComponent<VyreController>();
+            if (vyre != null) vyre.enabled = false;
         }
     }
 
     void IntentarAbrirPuerta()
     {
+        yaIntentoAbrir = true;
+
         if (TieneJugadorLlave())
         {
             estaAbriendose = true;
-            if (sonidoPuertaAbrir != null) audioSource.PlayOneShot(sonidoPuertaAbrir);
-            Debug.Log("Puerta abierta");
+            if (sonidoPuertaAbrir != null)
+                audioSource.PlayOneShot(sonidoPuertaAbrir);
+            ConsumirLlave();
+            Debug.Log("Puerta abriéndose");
         }
         else
         {
-            if (sonidoSinLlave != null) audioSource.PlayOneShot(sonidoSinLlave);
-            Debug.Log("Necesitas una llave");
+            if (sonidoSinLlave != null)
+                audioSource.PlayOneShot(sonidoSinLlave);
+            Debug.Log("❌ Necesitas la llave para abrir esta puerta");
+            Invoke(nameof(ReintentarAbrir), 2f);
         }
+    }
+
+    void ReintentarAbrir()
+    {
+        yaIntentoAbrir = false;
     }
 
     bool TieneJugadorLlave()
@@ -162,5 +233,67 @@ public class FinalNivel : MonoBehaviour
         foreach (ObjetoRecolectable obj in Inventario.instancia.ObtenerObjetos())
             if (obj.nombreObjeto == nombreLlaveRequerida) return true;
         return false;
+    }
+
+    void ConsumirLlave()
+    {
+        if (Inventario.instancia == null) return;
+        foreach (ObjetoRecolectable obj in Inventario.instancia.ObtenerObjetos())
+        {
+            if (obj.nombreObjeto == nombreLlaveRequerida)
+            {
+                Inventario.instancia.QuitarObjeto(obj);
+                break;
+            }
+        }
+    }
+
+    IEnumerator FadeOutYCargarEscena()
+    {
+        // Crear Canvas para el fade
+        GameObject fadeCanvas = new GameObject("FadeCanvas");
+        Canvas canvas = fadeCanvas.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 999;
+
+        // Agregar imagen negra
+        UnityEngine.UI.Image fadeImage = fadeCanvas.AddComponent<UnityEngine.UI.Image>();
+        fadeImage.color = Color.black;
+        fadeImage.raycastTarget = false;
+
+        // Empezar con alpha 0
+        Color color = fadeImage.color;
+        color.a = 0f;
+        fadeImage.color = color;
+
+        // Hacer fade in (a negro)
+        float tiempo = 0f;
+        while (tiempo < duracionFadeOut)
+        {
+            tiempo += Time.deltaTime;
+            color.a = Mathf.Clamp01(tiempo / duracionFadeOut);
+            fadeImage.color = color;
+            yield return null;
+        }
+
+        // Asegurar que esté completamente negro
+        color.a = 1f;
+        fadeImage.color = color;
+
+        // Pequeña pausa opcional
+        yield return new WaitForSeconds(0.1f);
+
+        // Cargar la escena
+        SceneManager.LoadScene(nombreEscena);
+    }
+
+    void OnDrawGizmos()
+    {
+        BoxCollider triggerCol = GetComponentInChildren<BoxCollider>();
+        if (triggerCol != null && triggerCol.isTrigger)
+        {
+            Gizmos.color = new Color(0, 1, 0, 0.3f);
+            Gizmos.DrawCube(triggerCol.bounds.center, triggerCol.bounds.size);
+        }
     }
 }

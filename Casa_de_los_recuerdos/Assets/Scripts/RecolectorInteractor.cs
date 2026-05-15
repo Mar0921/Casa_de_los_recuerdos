@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,7 +32,7 @@ public class RecolectorInteractor : MonoBehaviour
                 {
                     Inventario.instancia.QuitarObjeto(objetoInventario);
 
-                    Debug.Log($"[Interactor] Se coloc� '{objetoInventario.nombreObjeto}' usando la tecla E.");
+                    Debug.Log($"[Interactor] Se colocó '{objetoInventario.nombreObjeto}' usando la tecla E.");
 
                     if (panelRecoleccion != null)
                         panelRecoleccion.SetActive(false);
@@ -89,7 +89,11 @@ public class RecolectorInteractor : MonoBehaviour
                 if (oi != null)
                 {
                     interactuableActual = oi;
-                    MostrarIndicadorRecoleccion(oi.mensaje);
+                    // 🔥 SOLUCIÓN: Solo mostrar el mensaje si NO está vacío y NO es el mensaje por defecto
+                    if (!string.IsNullOrEmpty(oi.mensaje) && oi.mensaje != "Este es un mensaje de interacción." && oi.mensaje != "esto es un mensaje de interacción")
+                    {
+                        MostrarIndicadorRecoleccion(oi.mensaje);
+                    }
                 }
             }
         }
@@ -126,7 +130,7 @@ public class RecolectorInteractor : MonoBehaviour
     {
         if (objeto == null)
         {
-            Debug.LogWarning("[Interactor] Se intent� recolectar un objeto nulo.");
+            Debug.LogWarning("[Interactor] Se intentó recolectar un objeto nulo.");
             return;
         }
 
@@ -143,6 +147,10 @@ public class RecolectorInteractor : MonoBehaviour
 
     void MostrarIndicadorRecoleccion(string texto)
     {
+        // 🔥 SOLUCIÓN: No mostrar si el texto está vacío o es el mensaje molesto
+        if (string.IsNullOrEmpty(texto) || texto == "Este es un mensaje de interacción." || texto == "esto es un mensaje de interacción")
+            return;
+
         if (panelRecoleccion != null)
         {
             panelRecoleccion.SetActive(true);
