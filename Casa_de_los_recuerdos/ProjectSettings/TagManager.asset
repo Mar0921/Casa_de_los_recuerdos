@@ -11,6 +11,8 @@ TagManager:
   - Rompible
   - FxTemporaire
   - Estrella
+  - NoBakeable
+  - tabla
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - Suelo
   - Water
   - UI
-  - 
+  - TablasCaidas
   - 
   - 
   - 
