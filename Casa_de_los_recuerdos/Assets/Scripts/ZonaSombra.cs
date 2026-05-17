@@ -5,14 +5,19 @@ public class ZonaSombra : MonoBehaviour
 {
     [Header("Overlay oscuro")]
     public Image overlayOscuro;
-    public float velocidadTransicion = 2f;
-    public float alphaMax = 0.4f;
+    public float velocidadTransicion = 15f;
+    public float alphaMax = 1f;
 
-    [Header("Panel o imagen opcional")]
+    [Header("Palpito")]
+    public bool activarPalpito = true;
+    public float velocidadPalpito = 2f;
+    public float intensidadPalpito = 0.2f; 
     public GameObject panelZona;
 
     private bool enSombra = false;
     private MovimientoPJ pj;
+    private float tiempoPalpito = 0f;
+    private float alphaBase = 0f;
 
     void Start()
     {
@@ -31,10 +36,36 @@ public class ZonaSombra : MonoBehaviour
     {
         if (overlayOscuro != null)
         {
-            float targetAlpha = enSombra ? alphaMax : 0f;
             Color color = overlayOscuro.color;
-            color.a = Mathf.MoveTowards(color.a, targetAlpha, velocidadTransicion * Time.deltaTime);
+
+            if (enSombra)
+            {
+                alphaBase = alphaMax;
+
+                if (activarPalpito)
+                {
+                    tiempoPalpito += Time.deltaTime * velocidadPalpito;
+                    float palpito = Mathf.Sin(tiempoPalpito) * intensidadPalpito;
+                    float alphaConPalpito = Mathf.Clamp(alphaBase + palpito, 0.5f, alphaMax);
+                    color.a = alphaConPalpito;
+                }
+                else
+                {
+                    color.a = Mathf.MoveTowards(color.a, alphaMax, velocidadTransicion * Time.deltaTime);
+                }
+            }
+            else
+            {
+                color.a = Mathf.MoveTowards(color.a, 0f, velocidadTransicion * Time.deltaTime);
+                tiempoPalpito = 0f;
+            }
+
             overlayOscuro.color = color;
+
+            if (enSombra)
+            {
+                Debug.Log($"Alpha actual: {color.a}");
+            }
         }
     }
 
@@ -51,7 +82,7 @@ public class ZonaSombra : MonoBehaviour
             if (panelZona != null)
                 panelZona.SetActive(true);
 
-            Debug.Log("[ZonaSombra] Entró a la zona.");
+            Debug.Log("[ZonaSombra] Entró a la zona");
         }
     }
 
@@ -67,8 +98,7 @@ public class ZonaSombra : MonoBehaviour
             if (panelZona != null)
                 panelZona.SetActive(false);
 
-            Debug.Log("[ZonaSombra] Salió de la zona.");
-
+            Debug.Log("[ZonaSombra] Salió de la zona");
             pj = null;
         }
     }
