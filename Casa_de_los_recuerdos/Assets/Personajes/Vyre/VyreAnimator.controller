@@ -495,7 +495,7 @@ BlendTree:
     m_DirectBlendParameter: VelX
     m_Mirror: 0
   m_BlendParameter: VelX
-  m_BlendParameterY: VelX
+  m_BlendParameterY: VelY
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1

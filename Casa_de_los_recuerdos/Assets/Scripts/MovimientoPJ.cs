@@ -27,6 +27,13 @@ public class MovimientoPJ : MonoBehaviour
     private float x, y;
     public LayerMask capaSuelo;
 
+    // ---- Variables para el collider ----
+    private CapsuleCollider capsuleCollider;
+    private Vector3 centroOriginal;
+    private float alturaOriginal;
+    private Vector3 centroAgachado;
+    private float alturaAgachado;
+
     private float umbralColisionVertical = 0.7f;
     private float offsetAlturaMinima = 0.3f;
 
@@ -36,6 +43,26 @@ public class MovimientoPJ : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+
+        // Obtener o añadir el CapsuleCollider
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        if (capsuleCollider == null)
+        {
+            capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
+            Debug.Log("Se añadió un CapsuleCollider automáticamente.");
+        }
+
+        // Guardar valores originales (de pie)
+        centroOriginal = capsuleCollider.center;
+        alturaOriginal = capsuleCollider.height;
+
+        // Valores agachado (según lo que pide el usuario)
+        centroAgachado = new Vector3(centroOriginal.x, 13.84571f, centroOriginal.z);
+        alturaAgachado = 28.25344f;
+
+        // Ajustar valores originales si no coinciden con los que tiene el usuario
+        // (por si ya los había cambiado manualmente)
+        // Pero asumimos que los originales son los que están al inicio.
 
         velocidadInicial = velocidadMovimiento;
 
@@ -66,17 +93,36 @@ public class MovimientoPJ : MonoBehaviour
         anim.SetFloat("VelX", x);
         anim.SetFloat("VelY", y);
 
-        if (puedoSaltar)
-            estaAgachado = Keyboard.current.rKey.isPressed;
+        // --- Lógica de agachado con R (solo si está en el suelo) ---
+        bool quiereAgachado = false;
+        if (puedoSaltar) // solo puede agacharse cuando está en el suelo
+            quiereAgachado = Keyboard.current.rKey.isPressed;
         else
-            estaAgachado = false;
+            quiereAgachado = false;
 
-        anim.SetBool("agachado", estaAgachado);
-        ActualizarVelocidad();
+        if (quiereAgachado != estaAgachado)
+        {
+            estaAgachado = quiereAgachado;
+            // Ajustar el collider según el estado
+            if (estaAgachado)
+            {
+                capsuleCollider.center = centroAgachado;
+                capsuleCollider.height = alturaAgachado;
+            }
+            else
+            {
+                capsuleCollider.center = centroOriginal;
+                capsuleCollider.height = alturaOriginal;
+            }
+            anim.SetBool("agachado", estaAgachado);
+            ActualizarVelocidad();
+        }
 
+        // Salto
         if (puedoSaltar && Keyboard.current.spaceKey.wasPressedThisFrame)
             Saltar();
 
+        // Sonido de pasos
         if (puedoSaltar && (x != 0f || y != 0f))
         {
             if (Time.time - tiempoUltimoPaso >= intervaloEntrepasos)
