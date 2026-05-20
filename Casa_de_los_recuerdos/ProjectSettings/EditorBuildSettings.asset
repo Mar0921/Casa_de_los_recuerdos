@@ -8,15 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/menu.unity
     guid: e33563e047155634b8e5371db48953dd
-  - enabled: 0
-    path: Assets/Scenes/1nivelCocina.unity
-    guid: d4021abf4ad9b8443b37f03b1cf78f42
   - enabled: 1
-    path: Assets/Scenes/Pasillo1.unity
-    guid: 6c5fab2a032ced647b147cb772512284
+    path: Assets/Scenes/Prologo.unity
+    guid: 16996010ffac54543b69c4b65ec0b2fb
   - enabled: 1
     path: Assets/Scenes/1nivelCocina.unity
     guid: 8b6ad896f6c0a6e47b791aced172603e
+  - enabled: 1
+    path: Assets/Scenes/Pasillo1.unity
+    guid: 6c5fab2a032ced647b147cb772512284
   - enabled: 1
     path: Assets/Scenes/2nivelSala.unity
     guid: 2ca4b2c6880e4b44495c38829a1fc2d5
@@ -29,8 +29,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PasilloEscalera.unity
     guid: 90fa79a52deae8c4081ad7e6dcea04f1
-  - enabled: 1
-    path: Assets/Scenes/Prologo.unity
-    guid: 16996010ffac54543b69c4b65ec0b2fb
+  - enabled: 0
+    path: Assets/Scenes/1nivelCocina.unity
+    guid: 8b6ad896f6c0a6e47b791aced172603e
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
