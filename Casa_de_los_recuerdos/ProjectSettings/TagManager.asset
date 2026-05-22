@@ -13,6 +13,7 @@ TagManager:
   - Estrella
   - NoBakeable
   - tabla
+  - ObjetoOscuro
   layers:
   - Default
   - TransparentFX

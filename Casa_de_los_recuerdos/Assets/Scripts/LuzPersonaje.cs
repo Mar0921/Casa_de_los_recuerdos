@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class LuzPersonaje : MonoBehaviour
 {
@@ -19,15 +20,18 @@ public class LuzPersonaje : MonoBehaviour
     public AudioClip sonidoLuz;
 
     [Header("Estrellas")]
-    public float radioEstrellas = 5f;           // Distancia para afectar estrellas
-    public float tiempoBrilloEstrella = 2f;     // Duración del brillo en las estrellas (opcional)
+    public float radioEstrellas = 5f;
+    public float tiempoBrilloEstrella = 2f;
+
+    [Header("Objetos")]
+    public float tiempoParaRecoger = 1f;  // Tiempo que tarda en recogerse después de revelado
 
     private float tiempoRestante = 0f;
     private float tiempoCooldown = 0f;
     private float tiempoAnim = 0f;
     private bool luzActiva = false;
     private bool animActiva = false;
-    private bool yaActivoEstrellas = false;      // Para llamar solo una vez por activación
+    private bool yaActivoEstrellas = false;
 
     void Start()
     {
@@ -53,7 +57,7 @@ public class LuzPersonaje : MonoBehaviour
             tiempoRestante = duracionLuz;
             tiempoAnim = tiempoAnimacion;
             luz.enabled = true;
-            yaActivoEstrellas = false;   // Reset para la próxima activación
+            yaActivoEstrellas = false;
 
             if (audioSource != null && sonidoLuz != null)
                 audioSource.PlayOneShot(sonidoLuz);
@@ -62,10 +66,11 @@ public class LuzPersonaje : MonoBehaviour
                 animator.SetBool("ilumine", true);
         }
 
-        // Activar estrellas (solo una vez al inicio de la luz)
+        // Activar estrellas y objetos (solo una vez al inicio de la luz)
         if (luzActiva && !yaActivoEstrellas)
         {
             ActivarEstrellas();
+            ActivarObjetos();
             yaActivoEstrellas = true;
         }
 
@@ -84,12 +89,7 @@ public class LuzPersonaje : MonoBehaviour
         // Control intensidad de la luz
         if (luzActiva)
         {
-            luz.intensity = Mathf.MoveTowards(
-                luz.intensity,
-                intensidadMax,
-                velocidadTransicion * Time.deltaTime
-            );
-
+            luz.intensity = Mathf.MoveTowards(luz.intensity, intensidadMax, velocidadTransicion * Time.deltaTime);
             tiempoRestante -= Time.deltaTime;
             if (tiempoRestante <= 0f)
             {
@@ -99,15 +99,9 @@ public class LuzPersonaje : MonoBehaviour
         }
         else
         {
-            luz.intensity = Mathf.MoveTowards(
-                luz.intensity,
-                0f,
-                velocidadTransicion * Time.deltaTime
-            );
-
+            luz.intensity = Mathf.MoveTowards(luz.intensity, 0f, velocidadTransicion * Time.deltaTime);
             if (luz.intensity <= 0f)
                 luz.enabled = false;
-
             if (tiempoCooldown > 0f)
                 tiempoCooldown -= Time.deltaTime;
         }
@@ -115,31 +109,36 @@ public class LuzPersonaje : MonoBehaviour
 
     void ActivarEstrellas()
     {
-        // Buscar objetos con tag "Estrella" dentro del radio
         Collider[] estrellasCercanas = Physics.OverlapSphere(transform.position, radioEstrellas);
-
         foreach (Collider col in estrellasCercanas)
         {
             if (col.CompareTag("Estrella"))
             {
-                // Intentar obtener un script que tenga el método "Brillar"
-                // Puede ser cualquier componente: EstrellaBrillo, Star, etc.
-                var estrella = col.GetComponent<MonoBehaviour>(); // O una interfaz específica
-
-                // Usamos reflection? Mejor buscar un método conocido por nombre.
-                // Opción 1: Enviar mensaje (menos eficiente pero flexible)
                 col.gameObject.SendMessage("Brillar", tiempoBrilloEstrella, SendMessageOptions.DontRequireReceiver);
-
-                // Opción 2: Si todas las estrellas tienen un componente específico:
-                // EstrellaController esc = col.GetComponent<EstrellaController>();
-                // if (esc != null) esc.Brillar(tiempoBrilloEstrella);
             }
         }
-
         Debug.Log($"[LuzPersonaje] Activadas estrellas cercanas: {estrellasCercanas.Length}");
     }
 
-    // Opcional: dibujar el radio en la escena para debugging
+    void ActivarObjetos()
+    {
+        // Busca todos los ObjetoOscuro en la escena sin depender del collider
+        ObjetoOscuro[] todosLosObjetos = FindObjectsByType<ObjetoOscuro>(FindObjectsSortMode.None);
+        int contador = 0;
+
+        foreach (ObjetoOscuro obj in todosLosObjetos)
+        {
+            float distancia = Vector3.Distance(transform.position, obj.transform.position);
+            if (distancia <= radioEstrellas)
+            {
+                obj.RevelarConAutoRecoger(tiempoParaRecoger);
+                contador++;
+            }
+        }
+
+        Debug.Log($"[LuzPersonaje] {contador} objetos programados para recogerse en {tiempoParaRecoger} segundos");
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
