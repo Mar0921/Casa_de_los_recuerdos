@@ -3,7 +3,17 @@ guid: f69d42cca4193b84c8cb00a02256bfca
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: OLD_FURNITURE _01
+    second: {fileID: 2100000, guid: 3bae17d9a8847e144849ec43368c9cb6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: OLD_FURNITURE _02
+    second: {fileID: 2100000, guid: 3bae17d9a8847e144849ec43368c9cb6, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

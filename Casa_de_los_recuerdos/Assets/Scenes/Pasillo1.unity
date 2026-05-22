@@ -6175,6 +6175,7 @@ MonoBehaviour:
   sonidoLuz: {fileID: 8300000, guid: 3cb1dee51ec34174091ab3e8c46684e4, type: 3}
   radioEstrellas: 5
   tiempoBrilloEstrella: 2
+  tiempoParaRecoger: 1
 --- !u!82 &1654109538
 AudioSource:
   m_ObjectHideFlags: 0
