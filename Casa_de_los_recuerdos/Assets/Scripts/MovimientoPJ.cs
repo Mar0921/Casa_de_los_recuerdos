@@ -93,9 +93,20 @@ public class MovimientoPJ : MonoBehaviour
         anim.SetFloat("VelX", x);
         anim.SetFloat("VelY", y);
 
-        // --- Lógica de agachado con R (solo si está en el suelo) ---
+        // --- Detectar caída por gravedad (no solo por salto) ---
+        if (!puedoSaltar)
+        {
+            // Si está bajando (velocidad Y negativa) activar animación de caída
+            if (rb.linearVelocity.y < -0.5f)
+            {
+                anim.SetBool("salte", true);
+                anim.SetBool("tocoSuelo", false);
+            }
+        }
+
+        // --- Lógica de agachado con R ---
         bool quiereAgachado = false;
-        if (puedoSaltar) // solo puede agacharse cuando está en el suelo
+        if (puedoSaltar)
             quiereAgachado = Keyboard.current.rKey.isPressed;
         else
             quiereAgachado = false;
@@ -103,7 +114,6 @@ public class MovimientoPJ : MonoBehaviour
         if (quiereAgachado != estaAgachado)
         {
             estaAgachado = quiereAgachado;
-            // Ajustar el collider según el estado
             if (estaAgachado)
             {
                 capsuleCollider.center = centroAgachado;

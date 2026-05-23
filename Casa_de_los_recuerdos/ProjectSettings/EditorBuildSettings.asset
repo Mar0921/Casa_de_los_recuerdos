@@ -21,14 +21,20 @@ EditorBuildSettings:
     path: Assets/Scenes/2nivelSala.unity
     guid: 2ca4b2c6880e4b44495c38829a1fc2d5
   - enabled: 1
+    path: Assets/Scenes/PasilloEscalera.unity
+    guid: 90fa79a52deae8c4081ad7e6dcea04f1
+  - enabled: 1
     path: Assets/Scenes/3nivelProta.unity
     guid: f56d0542ecec77747862f6359004a3ca
   - enabled: 1
     path: Assets/Scenes/4nivelHermana.unity
     guid: e84f886d5a444464682f9625f5be99da
   - enabled: 1
-    path: Assets/Scenes/PasilloEscalera.unity
-    guid: 90fa79a52deae8c4081ad7e6dcea04f1
+    path: Assets/Scenes/SombraFin.unity
+    guid: 0ae2efcf477161e43a824e5ebef2f1c6
+  - enabled: 1
+    path: Assets/Scenes/final.unity
+    guid: 936a8dfa49b2aaf438c15ef06c27acfb
   - enabled: 0
     path: Assets/Scenes/1nivelCocina.unity
     guid: 8b6ad896f6c0a6e47b791aced172603e

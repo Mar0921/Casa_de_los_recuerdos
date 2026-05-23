@@ -935,7 +935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CamaraSeguir
   offset: {x: -12, y: 8, z: 0}
-  suavidad: 5
+  suavidad: 2
 --- !u!114 &224192897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5183,6 +5183,7 @@ MonoBehaviour:
   sonidoAlTocar: {fileID: 0}
   audioSource: {fileID: 0}
   efectoParticula: {fileID: 0}
+  colorFade: {r: 1, g: 1, b: 1, a: 1}
 --- !u!65 &907294463
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5364,7 +5365,7 @@ MonoBehaviour:
   puertas:
   - {fileID: 201930841}
   - {fileID: 1136685595}
-  - {fileID: 1401968167}
+  - {fileID: 36212283}
   - {fileID: 954629910}
   duracionDesvanecimiento: 1.5
   curvaDesvanecimiento:
@@ -5596,6 +5597,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 13457427b5150ac4bb0c3a1e39e92702, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8636768849549244794, guid: 13457427b5150ac4bb0c3a1e39e92702, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -7818584479344610993, guid: 13457427b5150ac4bb0c3a1e39e92702, type: 3}
       propertyPath: m_Layer
@@ -9295,11 +9300,6 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!1 &1401968167 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1436391076050319, guid: 13457427b5150ac4bb0c3a1e39e92702, type: 3}
-  m_PrefabInstance: {fileID: 925542017}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1407371815
 GameObject:
   m_ObjectHideFlags: 0

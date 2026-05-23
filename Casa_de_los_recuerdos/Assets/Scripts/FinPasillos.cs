@@ -7,13 +7,16 @@ public class FinPasillos : MonoBehaviour
     [Header("Configuración")]
     public string nombreEscena = "SiguienteEscena";
     public string tagJugador = "Player";
-    public float duracionFade = 1f;              // Duración del fade a negro
-    public float delayAntesDeCargar = 0.5f;      // Espera antes del fade
+    public float duracionFade = 1f;
+    public float delayAntesDeCargar = 0.5f;
 
     [Header("Efectos")]
     public AudioClip sonidoAlTocar;
     public AudioSource audioSource;
     public GameObject efectoParticula;
+
+    [Header("Fade")]
+    public Color colorFade = Color.black; // Cámbialo a blanco desde el Inspector
 
     private bool yaToco = false;
 
@@ -26,45 +29,38 @@ public class FinPasillos : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (yaToco) return;
-
         if (other.CompareTag(tagJugador))
         {
             yaToco = true;
             Debug.Log($"🎯 Cargando escena: {nombreEscena}");
 
-            // Efectos inmediatos
             if (sonidoAlTocar != null && audioSource != null)
                 audioSource.PlayOneShot(sonidoAlTocar);
 
             if (efectoParticula != null)
                 Instantiate(efectoParticula, transform.position, Quaternion.identity);
 
-            // Iniciar corrutina de fade
             StartCoroutine(FadeYCargarEscena());
         }
     }
 
     IEnumerator FadeYCargarEscena()
     {
-        // Esperar un poco antes del fade
         yield return new WaitForSeconds(delayAntesDeCargar);
 
-        // Crear imagen de fade si no existe
         GameObject fadeObj = new GameObject("FadeCanvas");
         Canvas canvas = fadeObj.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 999;
 
         UnityEngine.UI.Image image = fadeObj.AddComponent<UnityEngine.UI.Image>();
-        image.color = Color.black;
         image.raycastTarget = false;
 
-        // Hacer fade in (a negro)
-        float tiempo = 0f;
-        Color color = image.color;
-        color.a = 0f;
+        // Usar el color elegido pero con alpha 0 al inicio
+        Color color = new Color(colorFade.r, colorFade.g, colorFade.b, 0f);
         image.color = color;
 
+        float tiempo = 0f;
         while (tiempo < duracionFade)
         {
             tiempo += Time.deltaTime;
@@ -73,7 +69,6 @@ public class FinPasillos : MonoBehaviour
             yield return null;
         }
 
-        // Cargar escena
         SceneManager.LoadScene(nombreEscena);
     }
 }

@@ -6199,7 +6199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CamaraSeguir
   offset: {x: -12, y: 8, z: 0}
-  suavidad: 5
+  suavidad: 2
 --- !u!114 &1376330184
 MonoBehaviour:
   m_ObjectHideFlags: 0
