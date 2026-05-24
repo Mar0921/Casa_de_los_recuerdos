@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -19,9 +19,10 @@ public class MenuManager : MonoBehaviour
     public AudioSource efectosSonido;
     public Slider sliderMusica;
     public Slider sliderSonido;
+
     void Start()
     {
-        // Conectar eventos de sliders autom�ticamente
+        // Conectar eventos de sliders automáticamente
         if (sliderMusica != null)
             sliderMusica.onValueChanged.AddListener(CambiarVolumenMusica);
 
@@ -31,6 +32,7 @@ public class MenuManager : MonoBehaviour
         CargarPreferencias();
         MostrarMenuPrincipal();
     }
+
     void CargarPreferencias()
     {
         float volumenMusica = PlayerPrefs.GetFloat("VolumenMusica", 0.5f);
@@ -45,6 +47,7 @@ public class MenuManager : MonoBehaviour
         if (sliderSonido != null)
             sliderSonido.value = volumenSonido;
     }
+
     public void CambiarVolumenMusica(float volumen)
     {
         if (musicaFondo != null)
@@ -61,6 +64,7 @@ public class MenuManager : MonoBehaviour
         if (efectosSonido != null && !efectosSonido.isPlaying)
             efectosSonido.Play();
     }
+
     void DesactivarTodo()
     {
         menuPrincipal.SetActive(false);
@@ -72,7 +76,6 @@ public class MenuManager : MonoBehaviour
         panelCreditos.SetActive(false);
     }
 
-
     public void NuevoJuego()
     {
         SceneManager.LoadScene(1);
@@ -81,6 +84,18 @@ public class MenuManager : MonoBehaviour
     public void CargarJuego()
     {
         Debug.Log("Sistema de carga no definido");
+    }
+
+    // 🔴 NUEVO MÉTODO: SALIR DEL JUEGO
+    public void SalirJuego()
+    {
+#if UNITY_EDITOR
+        // Si estamos en el editor, detener la reproducción
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            // En el juego compilado, cerrar la aplicación
+            Application.Quit();
+#endif
     }
 
     public void AbrirOpciones()
@@ -94,7 +109,6 @@ public class MenuManager : MonoBehaviour
         DesactivarTodo();
         menuPrincipal.SetActive(true);
     }
-
 
     public void AbrirSonido()
     {
@@ -119,7 +133,6 @@ public class MenuManager : MonoBehaviour
         DesactivarTodo();
         panelCreditos.SetActive(true);
     }
-
 
     public void CerrarOpciones()
     {
