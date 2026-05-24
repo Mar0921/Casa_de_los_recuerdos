@@ -2265,6 +2265,7 @@ MonoBehaviour:
   sonidoAlTocar: {fileID: 8300000, guid: 62148a6f1c32e834cbc690e43824af29, type: 3}
   audioSource: {fileID: 596438094}
   efectoParticula: {fileID: 0}
+  colorFade: {r: 0, g: 0, b: 0, a: 1}
 --- !u!136 &596438089
 CapsuleCollider:
   m_ObjectHideFlags: 0
