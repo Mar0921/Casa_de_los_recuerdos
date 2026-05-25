@@ -12,6 +12,8 @@ public class CreditosFinales : MonoBehaviour
     public float tiempoInicialEspera = 1f;
     public float duracionFadeOut = 2f;
     public float duracionFadeMusica = 1.5f;
+    [Tooltip("Píxeles adicionales que sube el contenido después de salir de la pantalla")]
+    public float extraScroll = 200f;   // NUEVO: ajustable desde Inspector
 
     [Header("Referencias UI")]
     public RectTransform contenido;
@@ -33,14 +35,14 @@ public class CreditosFinales : MonoBehaviour
         "- 'Victorian Furniture Pack' de DarioSanchez (Sketchfab)\n" +
         "- 'Low Poly Characters' de Quaternius (modificados por el equipo)\n" +
         "- Animaciones de Mixamo (Adobe)\n\n" +
-        "🛠 HERRAMIENTAS UTILIZADAS:\n" +
+        " HERRAMIENTAS UTILIZADAS:\n" +
         "- Unity 2021.3 LTS\n" +
         "- Blender 3.0\n" +
         "- Photoshop / GIMP\n" +
         "- Audacity\n";
 
     [TextArea(5, 10)]
-    public string creditosDesarrollo = "📖 PROCESO DE DESARROLLO (Basado en GDD 'La Casa de los Recuerdos'):\n" +
+    public string creditosDesarrollo = " PROCESO DE DESARROLLO (Basado en GDD 'La Casa de los Recuerdos'):\n" +
         "- Diseño narrativo: Documento de 30 páginas con estructura Inicio-Nudo-Desenlace.\n" +
         "- Prototipado: 3 iteraciones de mecánicas de luz/sombra con Lumen y Vyre.\n" +
         "- Niveles: Cocina (tutorial), Sala (puzzle de muebles), Habitación niño (objetos oscuros), Habitación hermana (tentáculos + fusión).\n" +
@@ -79,10 +81,9 @@ public class CreditosFinales : MonoBehaviour
         string texto = "<b><size=36>LA CASA DE LOS RECUERDOS</size></b>\n\n";
         texto += "<size=28>Créditos finales</size>\n\n";
         texto += "<size=22><i>Un viaje entre recuerdos y superación</i></size>\n\n";
-        texto += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
 
         // Equipo de desarrollo MAGO
-        texto += "<b>Equipo de desarrollo MAGO:</b>\n";
+        texto += "<b>Equipo de desarrollo MAGO:</b><br>\n";
         texto += "• Daniel Muñoz Delgado\n";
         texto += "• Estefania del Amor Restrepo\n";
         texto += "• Juan Felipe Fernandez Losada\n";
@@ -90,11 +91,11 @@ public class CreditosFinales : MonoBehaviour
 
         texto += "<b>Dirección y narrativa:</b> Mariana Parra Hernández\n";
         texto += "<b>Testing y QA:</b> Los cuatro integrantes\n";
-        texto += "<b>Agradecimientos especiales:</b> A nuestras familias y a todos los que apoyaron el proyecto.\n\n";
+        texto += "<b>Agradecimientos especiales:</b> A nuestras familias y a todos los que apoyaron el proyecto.<br>\n\n";
         texto += creditosModelos;
         texto += creditosDesarrollo;
-        texto += "\n<size=20>Has acompañado a Lumen y Vyre a unirse de nuevo.</size>\n";
-        texto += "<b><size=24>¡Gracias por jugar!</size></b>\n";
+        texto += "\n<size=28>Has acompañado a Lumen y Vyre a unirse de nuevo.</size>\n";
+        texto += "<b><size=26>¡Gracias por jugar!</size></b>\n";
 
         return texto;
     }
@@ -104,7 +105,8 @@ public class CreditosFinales : MonoBehaviour
         yield return new WaitForSeconds(tiempoInicialEspera);
 
         float alturaContenido = contenido.rect.height;
-        float distanciaTotal = alturaContenido + Screen.height;
+        // Sumamos la pantalla completa y un extra para que suba más
+        float distanciaTotal = alturaContenido + Screen.height + extraScroll;
         float tiempoTotal = distanciaTotal / velocidadScroll;
         float tiempoScroll = 0f;
 

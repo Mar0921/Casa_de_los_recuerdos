@@ -160,15 +160,10 @@ MonoBehaviour:
   tiempoLogo: 5
   musicaCreditos: {fileID: 31973806}
   volumenMusica: 0.5
-  creditosModelos: 'Modelos 3D de CGTrader y Sketchfab:
-
-    - Casa principal: ''Old
-    Abandoned House'' (CGTrader)
-
-    - Muebles: ''Antique Furniture Pack'' (Sketchfab)
-
-    -
-    Personajes: adaptados de modelos base de Mixamo y modificados por el equipo.'
+  creditosModelos: "Modelos 3D de CGTrader y Sketchfab:\n- Casa principal: 'Old Abandoned
+    House' (CGTrader), y dem\xE1s modelos\n- Muebles: 'Antique Furniture Pack' (Sketchfab),
+    y dem\xE1s modelos\n- Personajes: \"Lumen\" y \"Vyre\" creaci\xF3n del equipo
+    MAGO.        \n\n"
   creditosDesarrollo: "Proceso de desarrollo basado en el GDD 'La Casa de los Recuerdos':\n-
     Documentaci\xF3n de dise\xF1o de niveles y narrativa.\n- Implementaci\xF3n de
     mec\xE1nicas de luz/sombra (Lumen/Vyre).\n- Sistema de objetos oscuros y puzzles
