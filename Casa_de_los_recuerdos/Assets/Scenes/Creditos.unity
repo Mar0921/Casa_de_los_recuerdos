@@ -156,43 +156,10 @@ MonoBehaviour:
   contenido: {fileID: 2043137586}
   imagenesDesarrollo: []
   textoCreditos: {fileID: 1669137383}
-  logoFinal: {fileID: 962317548}
+  logoFinal: {fileID: 0}
   tiempoLogo: 5
-  musicaCreditos: {fileID: 0}
+  musicaCreditos: {fileID: 31973806}
   volumenMusica: 0.5
-  asignaciones:
-  - rol: "Creaci\xF3n de Personajes"
-    persona: "Daniel Mu\xF1oz Delgado y Estefania del Amor"
-  - rol: "Men\xFA"
-    persona: Mariana Parra Hernandez
-  - rol: "Nivel 0: Pr\xF3logo"
-    persona: "Daniel Mu\xF1oz Delgado"
-  - rol: 'Nivel 1: Cocina'
-    persona: Mariana Parra Hernandez
-  - rol: "Pasillo 1: Persecuci\xF3n"
-    persona: "Estefania del Amor Restr\xE9po"
-  - rol: 'Nivel 2: Sala'
-    persona: "Estefania del Amor Restr\xE9po"
-  - rol: Pasillo Escaleras
-    persona: "Juan Felipe Fern\xE1ndez"
-  - rol: "Nivel 3: El ni\xF1o que fu\xED"
-    persona: "Daniel Mu\xF1oz Delgado"
-  - rol: 'Nivel 4: Hermanita'
-    persona: "Daniel Mu\xF1oz Delgado"
-  - rol: Derrota de la Sombra
-    persona: "Daniel Mu\xF1oz Delgado"
-  - rol: "Ep\xEDlogo "
-    persona: "Daniel Mu\xF1oz Delgado"
-  - rol: Recuerdos
-    persona: "Mariana Parra Hern\xE1ndez"
-  - rol: "Creaci\xF3n de la pagina bitacora"
-    persona: "Juan Felipe Fern\xE1ndez"
-  - rol: "Actualizaci\xF3n de la pagina"
-    persona: "Mariana Parra Hern\xE1ndez"
-  - rol: Sonido
-    persona: "Daniel Mu\xF1oz Delgado y Juan Felipe Hernandez"
-  - rol: "Recolecci\xF3n de modelados"
-    persona: "Estefania del Amor Restr\xE9po"
   creditosModelos: 'Modelos 3D de CGTrader y Sketchfab:
 
     - Casa principal: ''Old
@@ -233,7 +200,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 793c9549d512aff45963a404db2defa9, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -579,81 +546,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 879086593}
   m_CullTransparentMesh: 1
---- !u!1 &962317546
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 962317547}
-  - component: {fileID: 962317549}
-  - component: {fileID: 962317548}
-  m_Layer: 5
-  m_Name: Image
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &962317547
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 962317546}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7.7916756, y: 7.7916756, z: 7.7916756}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1438757859}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 38, y: -4}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &962317548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 962317546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 72252a6db9efd6c47a9c88244616107f, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &962317549
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 962317546}
-  m_CullTransparentMesh: 1
 --- !u!1 &974159299
 GameObject:
   m_ObjectHideFlags: 0
@@ -922,7 +814,6 @@ RectTransform:
   - {fileID: 1468197586}
   - {fileID: 879086594}
   - {fileID: 2043137586}
-  - {fileID: 962317547}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

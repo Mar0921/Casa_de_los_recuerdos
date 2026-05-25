@@ -7976,6 +7976,7 @@ MonoBehaviour:
   lumen: {fileID: 1654109533}
   vyre: {fileID: 1044746702}
   cooldown: 2
+  particulasCambio: {fileID: 3399974184335313378, guid: cce9be93035ae9a4e815d270f2d23833, type: 3}
 --- !u!114 &2060546947
 MonoBehaviour:
   m_ObjectHideFlags: 0

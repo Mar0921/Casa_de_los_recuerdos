@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SombraFin.unity
     guid: 0ae2efcf477161e43a824e5ebef2f1c6
   - enabled: 1
-    path: Assets/Scenes/final.unity
+    path: Assets/Scenes/Epilogo.unity
     guid: 936a8dfa49b2aaf438c15ef06c27acfb
   - enabled: 1
     path: Assets/Scenes/Creditos.unity

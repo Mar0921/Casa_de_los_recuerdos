@@ -25,7 +25,7 @@ public class FinalNivel : MonoBehaviour
     [Header("Siguiente escena")]
     public string nombreEscena;
     public float tiempoAntesDeCargar = 1f;
-    public float duracionFadeOut = 1f;  // Duración del fade a negro
+    public float duracionFadeOut = 1f;  
 
     private bool estaAbierta = false;
     private bool estaAbriendose = false;

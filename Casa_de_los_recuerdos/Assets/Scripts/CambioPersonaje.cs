@@ -7,6 +7,9 @@ public class CambioPersonaje : MonoBehaviour
     public GameObject vyre;
     public float cooldown = 0.5f;
 
+    [Header("Efectos")]
+    public ParticleSystem particulasCambio; // Prefab o referencia a un sistema de partículas
+
     private bool puedeCambiar = true;
     private bool estaCambiando = false;
     private GameObject personajeActual;
@@ -30,6 +33,14 @@ public class CambioPersonaje : MonoBehaviour
     {
         estaCambiando = true;
         puedeCambiar = false;
+
+        // Mostrar partículas en la posición del personaje actual
+        if (particulasCambio != null)
+        {
+            ParticleSystem ps = Instantiate(particulasCambio, personajeActual.transform.position, Quaternion.identity);
+            ps.Play();
+            Destroy(ps.gameObject, ps.main.duration + 0.5f);
+        }
 
         // Guardar posición y rotación
         Vector3 posicion = personajeActual.transform.position;

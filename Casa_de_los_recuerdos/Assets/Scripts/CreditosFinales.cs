@@ -19,22 +19,12 @@ public class CreditosFinales : MonoBehaviour
     public TMP_Text textoCreditos;
 
     [Header("Logo Final")]
-    public Image logoFinal;               // Imagen del logo que aparecerá al final
-    public float tiempoLogo = 5f;         // Tiempo que se muestra el logo antes de ir al menú
+    public Image logoFinal;
+    public float tiempoLogo = 5f;
 
     [Header("Música")]
     public AudioSource musicaCreditos;
     public float volumenMusica = 0.5f;
-
-    [Header("Asignación Manual")]
-    public List<AsignacionRol> asignaciones = new List<AsignacionRol>();
-
-    [System.Serializable]
-    public class AsignacionRol
-    {
-        public string rol;
-        public string persona;
-    }
 
     [Header("Créditos adicionales")]
     [TextArea(5, 10)]
@@ -59,26 +49,20 @@ public class CreditosFinales : MonoBehaviour
         "- Transiciones de escena con fade blanco/negro y animación 'MeLevante'.\n" +
         "- Testing interno: 15+ horas de juego para ajustar dificultad y ritmo.\n";
 
-    private bool finalizado = false;
-
     void Start()
     {
-        // Ocultar logo al inicio si existe
         if (logoFinal != null)
             logoFinal.gameObject.SetActive(false);
 
-        // Generar texto
         string textoCredito = GenerarTextoCreditos();
         if (textoCreditos != null)
             textoCreditos.text = textoCredito;
 
-        // Posición inicial del contenido (abajo)
         if (contenido != null)
         {
             contenido.anchoredPosition = new Vector2(contenido.anchoredPosition.x, -Screen.height * 0.5f);
         }
 
-        // Música
         if (musicaCreditos != null)
         {
             musicaCreditos.volume = volumenMusica;
@@ -97,13 +81,14 @@ public class CreditosFinales : MonoBehaviour
         texto += "<size=22><i>Un viaje entre recuerdos y superación</i></size>\n\n";
         texto += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
 
-        foreach (var asign in asignaciones)
-        {
-            if (!string.IsNullOrEmpty(asign.rol) && !string.IsNullOrEmpty(asign.persona))
-                texto += $"<b>{asign.rol}:</b> {asign.persona}\n";
-        }
+        // Equipo de desarrollo MAGO
+        texto += "<b>Equipo de desarrollo MAGO:</b>\n";
+        texto += "• Daniel Muñoz Delgado\n";
+        texto += "• Estefania del Amor Restrepo\n";
+        texto += "• Juan Felipe Fernandez Losada\n";
+        texto += "• Mariana Parra Hernández\n\n";
 
-        texto += "\n<b>Dirección y narrativa:</b> Mariana Parra Hernández\n";
+        texto += "<b>Dirección y narrativa:</b> Mariana Parra Hernández\n";
         texto += "<b>Testing y QA:</b> Los cuatro integrantes\n";
         texto += "<b>Agradecimientos especiales:</b> A nuestras familias y a todos los que apoyaron el proyecto.\n\n";
         texto += creditosModelos;
@@ -118,7 +103,6 @@ public class CreditosFinales : MonoBehaviour
     {
         yield return new WaitForSeconds(tiempoInicialEspera);
 
-        // Scroll basado en tiempo (garantiza que termine)
         float alturaContenido = contenido.rect.height;
         float distanciaTotal = alturaContenido + Screen.height;
         float tiempoTotal = distanciaTotal / velocidadScroll;
@@ -131,13 +115,9 @@ public class CreditosFinales : MonoBehaviour
             yield return null;
         }
 
-        // Pequeña pausa antes del fade
         yield return new WaitForSeconds(0.5f);
-
-        // Fade out de la pantalla
         yield return StartCoroutine(FadeOutPantalla());
 
-        // Desvanecer música
         if (musicaCreditos != null)
         {
             float tiempo = 0;
@@ -151,11 +131,9 @@ public class CreditosFinales : MonoBehaviour
             musicaCreditos.Stop();
         }
 
-        // Mostrar logo y esperar
         if (logoFinal != null)
         {
             logoFinal.gameObject.SetActive(true);
-            // Opcional: efecto fade in del logo
             Color c = logoFinal.color;
             c.a = 0;
             logoFinal.color = c;
@@ -169,16 +147,13 @@ public class CreditosFinales : MonoBehaviour
                 yield return null;
             }
             logoFinal.color = new Color(c.r, c.g, c.b, 1);
-
             yield return new WaitForSeconds(tiempoLogo);
         }
         else
         {
-            // Si no hay logo, esperar 2 segundos
             yield return new WaitForSeconds(2f);
         }
 
-        // Cargar menú
         SceneManager.LoadScene("menu");
     }
 
