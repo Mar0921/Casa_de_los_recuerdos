@@ -148,6 +148,7 @@ public class MovimientoPJ : MonoBehaviour
 
     void FixedUpdate()
     {
+        Debug.Log($"velocidadMovimiento JUSTO ANTES de mover: {velocidadMovimiento}");
         Camera cam = Camera.main;
         if (cam == null) return;
 
@@ -207,8 +208,10 @@ public class MovimientoPJ : MonoBehaviour
 
     void ActualizarVelocidad()
     {
+        Debug.Log($"ActualizarVelocidad llamado - enSombra: {enSombra} | estaAgachado: {estaAgachado}");
         float velocidadBase = enSombra ? velocidadEnSombra : velocidadNormal;
         velocidadMovimiento = estaAgachado ? velocidadBase * 0.5f : velocidadBase;
+        Debug.Log($"velocidadMovimiento resultado: {velocidadMovimiento}");
     }
 
     public void EnSombra(bool activo)

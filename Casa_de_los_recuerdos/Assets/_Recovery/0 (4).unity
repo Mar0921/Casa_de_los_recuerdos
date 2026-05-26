@@ -3606,7 +3606,7 @@ MonoBehaviour:
   velocidadRotacion: 200
   fuerzaDeSalto: 7
   velocidadNormal: 5
-  velocidadEnSombra: 2
+  velocidadEnSombra: 1
   velocidadAgachado: 1
   puedoSaltar: 1
   audioSource: {fileID: 420932393}
@@ -8060,7 +8060,7 @@ Transform:
   m_GameObject: {fileID: 834188937}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.24, y: -3.3626404, z: 0}
+  m_LocalPosition: {x: -14.24, y: -2.31, z: 0}
   m_LocalScale: {x: 1.9052927, y: 1.147831, z: 1.9761995}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8309,7 +8309,6 @@ GameObject:
   - component: {fileID: 856405813}
   - component: {fileID: 856405812}
   - component: {fileID: 856405811}
-  - component: {fileID: 856405815}
   m_Layer: 0
   m_Name: Zona (2)
   m_TagString: Untagged
@@ -8326,7 +8325,7 @@ Transform:
   m_GameObject: {fileID: 856405809}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.014992008, z: -0, w: 0.99988765}
-  m_LocalPosition: {x: -98.5, y: -4.3626404, z: -2.4}
+  m_LocalPosition: {x: -98.5, y: -3.31, z: -2.4}
   m_LocalScale: {x: 4.4826674, y: 0.064869404, z: 4.746569}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8428,28 +8427,6 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856405809}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &856405815
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856405809}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &867467334
 GameObject:
@@ -18053,7 +18030,6 @@ GameObject:
   - component: {fileID: 1924465577}
   - component: {fileID: 1924465576}
   - component: {fileID: 1924465575}
-  - component: {fileID: 1924465579}
   m_Layer: 0
   m_Name: Zona (1)
   m_TagString: Untagged
@@ -18070,7 +18046,7 @@ Transform:
   m_GameObject: {fileID: 1924465573}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.18966797, z: -0, w: 0.98184836}
-  m_LocalPosition: {x: -57.3, y: -4.2226405, z: -0.5}
+  m_LocalPosition: {x: -57.3, y: -3.17, z: -0.5}
   m_LocalScale: {x: 2.3825686, y: 0.12019802, z: 1.9761995}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18172,28 +18148,6 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924465573}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &1924465579
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1924465573}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1943524633 stripped
 GameObject:

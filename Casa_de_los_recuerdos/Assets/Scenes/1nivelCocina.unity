@@ -1534,7 +1534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8b6c48f97efb3f84f8489ae58db40a1a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8b6c48f97efb3f84f8489ae58db40a1a, type: 3}
       propertyPath: m_TagString
@@ -7206,6 +7206,10 @@ MonoBehaviour:
   audioSource: {fileID: 1612593534}
   sonidoPuertaAbrir: {fileID: 8300000, guid: b7d27fababc736e41a38bfb5e1568a30, type: 3}
   sonidoSinLlave: {fileID: 0}
+  usarRotacionManual: 0
+  rotacionCerradaManual: {x: 90, y: 0, z: 180}
+  rotacionAbiertaManual: {x: 90, y: 0, z: -90}
+  cargarEscenaAlAbrir: 0
   luces:
   - {fileID: 33357886}
   - {fileID: 1973052873}

@@ -2370,15 +2370,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 73e272e3a5b9ef045af68bfc63e98d8a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.05
+      value: 2.0774403
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 73e272e3a5b9ef045af68bfc63e98d8a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 31.07
+      value: 11.813923
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 73e272e3a5b9ef045af68bfc63e98d8a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 110.5
+      value: 143.07
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 73e272e3a5b9ef045af68bfc63e98d8a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2671,6 +2671,7 @@ MonoBehaviour:
   sonidoLuz: {fileID: 8300000, guid: 3cb1dee51ec34174091ab3e8c46684e4, type: 3}
   radioEstrellas: 5
   tiempoBrilloEstrella: 2
+  tiempoParaRecoger: 1
 --- !u!114 &376974456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6100,6 +6101,7 @@ MonoBehaviour:
   lumen: {fileID: 376974449}
   vyre: {fileID: 179020694}
   cooldown: 2
+  particulasCambio: {fileID: 0}
 --- !u!82 &1465099995
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6959,6 +6961,10 @@ MonoBehaviour:
   audioSource: {fileID: 1612593534}
   sonidoPuertaAbrir: {fileID: 8300000, guid: b7d27fababc736e41a38bfb5e1568a30, type: 3}
   sonidoSinLlave: {fileID: 0}
+  usarRotacionManual: 0
+  rotacionCerradaManual: {x: 90, y: 0, z: 180}
+  rotacionAbiertaManual: {x: 90, y: 0, z: -90}
+  cargarEscenaAlAbrir: 0
   luces:
   - {fileID: 33357886}
   - {fileID: 1973052873}

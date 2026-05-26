@@ -97,9 +97,6 @@ public class LumenController : MonoBehaviour
                 StopCoroutine(corrutinaActual);
             corrutinaActual = StartCoroutine(RevelarYMostrarPistas());
         }
-
-        if (movimiento != null)
-            movimiento.velocidadMovimiento = movimiento.velocidadNormal;
     }
 
     IEnumerator RevelarYMostrarPistas()
