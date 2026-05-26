@@ -18,6 +18,7 @@ public class RecolectorInteractor : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("Update corriendo"); // DEBUG TEMPORAL
         BuscarObjetosCercanos();
 
         if (interactuableActual != null && Keyboard.current.eKey.wasPressedThisFrame)
@@ -31,7 +32,6 @@ public class RecolectorInteractor : MonoBehaviour
                 if (seColoco)
                 {
                     Inventario.instancia.QuitarObjeto(objetoInventario);
-
                     Debug.Log($"[Interactor] Se colocó '{objetoInventario.nombreObjeto}' usando la tecla E.");
 
                     if (panelRecoleccion != null)
@@ -67,11 +67,12 @@ public class RecolectorInteractor : MonoBehaviour
         interactuableActual = null;
         recolectableActual = null;
 
-        Collider[] collidersEnRango = Physics.OverlapSphere(transform.position, radioDeteccion);
+        // Detecta tanto colliders normales como triggers
+        Collider[] collidersEnRango = Physics.OverlapSphere(transform.position, radioDeteccion, ~0, QueryTriggerInteraction.Collide);
 
         foreach (Collider col in collidersEnRango)
         {
-            if (col.CompareTag("Recolectable"))
+            if (col.CompareTag("Recolectable") || col.CompareTag("Llave"))
             {
                 ObjetoRecolectable or = col.GetComponent<ObjetoRecolectable>();
 
@@ -89,7 +90,6 @@ public class RecolectorInteractor : MonoBehaviour
                 if (oi != null)
                 {
                     interactuableActual = oi;
-                    // 🔥 SOLUCIÓN: Solo mostrar el mensaje si NO está vacío y NO es el mensaje por defecto
                     if (!string.IsNullOrEmpty(oi.mensaje) && oi.mensaje != "Este es un mensaje de interacción." && oi.mensaje != "esto es un mensaje de interacción")
                     {
                         MostrarIndicadorRecoleccion(oi.mensaje);
@@ -100,6 +100,30 @@ public class RecolectorInteractor : MonoBehaviour
 
         if (interactuableActual == null && recolectableActual == null)
         {
+            if (panelRecoleccion != null)
+                panelRecoleccion.SetActive(false);
+        }
+    }
+
+    // Se llama cuando el collider del personaje toca un trigger
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Recolectable"))
+        {
+            ObjetoRecolectable or = other.GetComponent<ObjetoRecolectable>();
+            if (or != null && !or.estaEnInventario && !or.yaFueColocado)
+            {
+                recolectableActual = or;
+                MostrarIndicadorRecoleccion("Click derecho para recoger");
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Recolectable"))
+        {
+            recolectableActual = null;
             if (panelRecoleccion != null)
                 panelRecoleccion.SetActive(false);
         }
@@ -147,7 +171,6 @@ public class RecolectorInteractor : MonoBehaviour
 
     void MostrarIndicadorRecoleccion(string texto)
     {
-        // 🔥 SOLUCIÓN: No mostrar si el texto está vacío o es el mensaje molesto
         if (string.IsNullOrEmpty(texto) || texto == "Este es un mensaje de interacción." || texto == "esto es un mensaje de interacción")
             return;
 

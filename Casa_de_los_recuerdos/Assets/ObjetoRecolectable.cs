@@ -13,23 +13,11 @@ public class ObjetoRecolectable : MonoBehaviour
 
     public void GuardarEnInventario()
     {
-        if (CompareTag("Llave"))
+        // Si tiene sonido asignado, reproducirlo (sin importar el tag)
+        if (sonidoRecoger != null)
         {
-            Debug.Log($"[Llave] Objeto tiene tag 'Llave': {gameObject.name}");
-
-            if (sonidoRecoger != null)
-            {
-                Debug.Log($"[Llave] Reproduciendo sonido en posición: {transform.position}");
-                AudioSource.PlayClipAtPoint(sonidoRecoger, transform.position, volumenSonido);
-            }
-            else
-            {
-                Debug.LogWarning($"[Llave] NO hay AudioClip asignado en '{nombreObjeto}'");
-            }
-        }
-        else
-        {
-            Debug.Log($"[Recolectable] Objeto '{nombreObjeto}' NO tiene tag 'Llave' (Tag actual: {tag})");
+            AudioSource.PlayClipAtPoint(sonidoRecoger, Camera.main.transform.position, volumenSonido);
+            Debug.Log($"[Recolectable] Reproduciendo sonido de '{nombreObjeto}'");
         }
 
         estaEnInventario = true;
@@ -52,7 +40,6 @@ public class ObjetoRecolectable : MonoBehaviour
             rend.enabled = false;
 
         gameObject.SetActive(false);
-
         Debug.Log($"[Recolectable] '{nombreObjeto}' guardado en inventario.");
     }
 

@@ -57,7 +57,7 @@ public class PuertaFinJuego : MonoBehaviour
             puerta = gameObject;
 
         if (puerta != null)
-            rotacionInicialPuerta = puerta.transform.rotation;
+            rotacionInicialPuerta = Quaternion.Euler(0, puerta.transform.eulerAngles.y, 0);
     }
 
     void Update()

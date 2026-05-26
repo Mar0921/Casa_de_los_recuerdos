@@ -12,6 +12,14 @@ public class FinalNivel : MonoBehaviour
     public AudioClip sonidoPuertaAbrir;
     public AudioClip sonidoSinLlave;
 
+    [Header("Rotación Manual (opcional)")]
+    public bool usarRotacionManual = false;
+    public Vector3 rotacionCerradaManual = new Vector3(90, 0, 180);
+    public Vector3 rotacionAbiertaManual = new Vector3(90, 0, -90);
+
+    [Header("Carga de escena")]
+    public bool cargarEscenaAlAbrir = false;
+
     [Header("Luces")]
     public Light[] luces;
     public float intensidadMax = 3f;
@@ -25,7 +33,7 @@ public class FinalNivel : MonoBehaviour
     [Header("Siguiente escena")]
     public string nombreEscena;
     public float tiempoAntesDeCargar = 1f;
-    public float duracionFadeOut = 1f;  
+    public float duracionFadeOut = 1f;
 
     private bool estaAbierta = false;
     private bool estaAbriendose = false;
@@ -46,8 +54,16 @@ public class FinalNivel : MonoBehaviour
 
     void Start()
     {
-        rotacionCerrada = transform.rotation;
-        rotacionAbierta = rotacionCerrada * Quaternion.Euler(0, -anguloApertura, 0);
+        if (usarRotacionManual)
+        {
+            rotacionCerrada = Quaternion.Euler(rotacionCerradaManual);
+            rotacionAbierta = Quaternion.Euler(rotacionAbiertaManual);
+        }
+        else
+        {
+            rotacionCerrada = transform.rotation;
+            rotacionAbierta = rotacionCerrada * Quaternion.Euler(0, -anguloApertura, 0);
+        }
 
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -85,7 +101,6 @@ public class FinalNivel : MonoBehaviour
 
     void Update()
     {
-        // Animación de apertura
         if (estaAbriendose)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionAbierta, Time.deltaTime * velocidadApertura);
@@ -98,22 +113,16 @@ public class FinalNivel : MonoBehaviour
             }
         }
 
-        // Si la puerta está abierta y el jugador está dentro del trigger, activar final
-        if (estaAbierta && jugadorDentroTrigger && !finalActivado)
+        if (estaAbierta && jugadorDentroTrigger && !finalActivado && !cargarEscenaAlAbrir)
         {
             ActivarFinal();
         }
 
-        // Secuencia de final
         if (finalActivado)
         {
-            // Luces
             foreach (Light luz in luces)
-            {
                 luz.intensity = Mathf.MoveTowards(luz.intensity, intensidadMax, velocidadTransicion * Time.deltaTime);
-            }
 
-            // Desvanecer jugador
             if (renderersJugador != null)
             {
                 foreach (Renderer rend in renderersJugador)
@@ -127,17 +136,13 @@ public class FinalNivel : MonoBehaviour
                 }
             }
 
-            // Delay antes de imagen
             if (!imagenActivada)
             {
                 timerImagen += Time.deltaTime;
                 if (timerImagen >= delayImagen)
-                {
                     imagenActivada = true;
-                }
             }
 
-            // Fade de imagen y carga de escena
             if (imagenActivada && mat != null)
             {
                 Color col;
@@ -145,7 +150,9 @@ public class FinalNivel : MonoBehaviour
                     col = mat.GetColor("_TintColor");
                 else
                     col = mat.GetColor("_Color");
+
                 col.a = Mathf.MoveTowards(col.a, 1f, velocidadFade * Time.deltaTime);
+
                 if (usarTintColor)
                     mat.SetColor("_TintColor", col);
                 else
@@ -156,9 +163,8 @@ public class FinalNivel : MonoBehaviour
                     timerEscena += Time.deltaTime;
                     if (timerEscena >= tiempoAntesDeCargar)
                     {
-                        // Iniciar el fade out antes de cargar la escena
                         StartCoroutine(FadeOutYCargarEscena());
-                        finalActivado = false; // Evitar que se ejecute múltiples veces
+                        finalActivado = false;
                     }
                 }
             }
@@ -172,18 +178,14 @@ public class FinalNivel : MonoBehaviour
             jugadorDentroTrigger = true;
 
             if (!estaAbierta && !estaAbriendose && !yaIntentoAbrir)
-            {
                 IntentarAbrirPuerta();
-            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
             jugadorDentroTrigger = false;
-        }
     }
 
     void ActivarFinal()
@@ -211,6 +213,10 @@ public class FinalNivel : MonoBehaviour
             if (sonidoPuertaAbrir != null)
                 audioSource.PlayOneShot(sonidoPuertaAbrir);
             ConsumirLlave();
+
+            if (cargarEscenaAlAbrir)
+                StartCoroutine(EsperarYCargarEscena());
+
             Debug.Log("Puerta abriéndose");
         }
         else
@@ -248,25 +254,27 @@ public class FinalNivel : MonoBehaviour
         }
     }
 
+    IEnumerator EsperarYCargarEscena()
+    {
+        yield return new WaitForSeconds(tiempoAntesDeCargar);
+        SceneManager.LoadScene(nombreEscena);
+    }
+
     IEnumerator FadeOutYCargarEscena()
     {
-        // Crear Canvas para el fade
         GameObject fadeCanvas = new GameObject("FadeCanvas");
         Canvas canvas = fadeCanvas.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 999;
 
-        // Agregar imagen negra
         UnityEngine.UI.Image fadeImage = fadeCanvas.AddComponent<UnityEngine.UI.Image>();
         fadeImage.color = Color.black;
         fadeImage.raycastTarget = false;
 
-        // Empezar con alpha 0
         Color color = fadeImage.color;
         color.a = 0f;
         fadeImage.color = color;
 
-        // Hacer fade in (a negro)
         float tiempo = 0f;
         while (tiempo < duracionFadeOut)
         {
@@ -276,14 +284,10 @@ public class FinalNivel : MonoBehaviour
             yield return null;
         }
 
-        // Asegurar que esté completamente negro
         color.a = 1f;
         fadeImage.color = color;
 
-        // Pequeña pausa opcional
         yield return new WaitForSeconds(0.1f);
-
-        // Cargar la escena
         SceneManager.LoadScene(nombreEscena);
     }
 
