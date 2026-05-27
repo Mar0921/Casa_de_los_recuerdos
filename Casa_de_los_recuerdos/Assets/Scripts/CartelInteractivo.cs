@@ -9,40 +9,48 @@ public class CartelInteractivo : MonoBehaviour
     public GameObject textoInteractuar;
     public GameObject botonCerrar;
 
-    [Header("Configuración")]
-    public float distanciaDeteccion = 3f;
-
-    private Transform jugador;
+    private bool jugadorCerca = false;
     private bool imagenVisible = false;
 
     void Start()
     {
-        jugador = GameObject.FindGameObjectWithTag("Player").transform;
         panelImagen.SetActive(false);
         textoInteractuar.SetActive(false);
         botonCerrar.SetActive(false);
-
         botonCerrar.GetComponent<Button>().onClick.AddListener(CerrarImagen);
     }
 
     void Update()
     {
-        float distancia = Vector3.Distance(transform.position, jugador.position);
-        bool cercano = distancia <= distanciaDeteccion;
+        if (jugadorCerca && !imagenVisible && Keyboard.current.fKey.wasPressedThisFrame)
+            AbrirImagen();
+    }
 
-        textoInteractuar.SetActive(cercano && !imagenVisible);
-
-        if (cercano && Keyboard.current.fKey.wasPressedThisFrame)
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
         {
-            imagenVisible = true;
-            panelImagen.SetActive(true);
-            botonCerrar.SetActive(true);
+            jugadorCerca = true;
+            textoInteractuar.SetActive(true);
         }
+    }
 
-        if (!cercano && imagenVisible)
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
         {
-            CerrarImagen();
+            jugadorCerca = false;
+            textoInteractuar.SetActive(false);
+            if (imagenVisible) CerrarImagen();
         }
+    }
+
+    private void AbrirImagen()
+    {
+        imagenVisible = true;
+        panelImagen.SetActive(true);
+        botonCerrar.SetActive(true);
+        textoInteractuar.SetActive(false);
     }
 
     public void CerrarImagen()

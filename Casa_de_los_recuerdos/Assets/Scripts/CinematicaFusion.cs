@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class CinematicaFusion : MonoBehaviour
 {
+    [Header("Modo Simple")]
+    public bool soloFadeTransicion = false; // ← actívalo en el Inspector para solo hacer fade y cambiar escena
+
     [Header("Personajes")]
     public Transform lumen;
     public Animator animLumen;
@@ -50,7 +53,6 @@ public class CinematicaFusion : MonoBehaviour
     private Color colorFondoOriginal;
     private CameraClearFlags flagsOriginales;
 
-    // Canvas del fade blanco
     private UnityEngine.UI.Image imagenFadeBlanco;
 
     void Start()
@@ -60,6 +62,13 @@ public class CinematicaFusion : MonoBehaviour
         flagsOriginales = cam.clearFlags;
 
         CrearFadeBlanco();
+
+        // Si el booleano está activo, solo hace fade y cambia de escena
+        if (soloFadeTransicion)
+        {
+            StartCoroutine(ModoSoloFade());
+            return; // no ejecuta nada más
+        }
 
         if (particulasFusion != null)
         {
@@ -82,6 +91,14 @@ public class CinematicaFusion : MonoBehaviour
 
         StartCoroutine(TemporizadorEscena());
         StartCoroutine(SecuenciaCinematica());
+    }
+
+    IEnumerator ModoSoloFade()
+    {
+        // Espera el tiempo configurado en el Inspector y luego hace fade y cambia escena
+        yield return new WaitForSeconds(tiempoFijoParaCambiarEscena);
+        yield return StartCoroutine(FadeBlanco());
+        CambiarEscena();
     }
 
     void CrearFadeBlanco()
@@ -174,7 +191,6 @@ public class CinematicaFusion : MonoBehaviour
 
         yield return StartCoroutine(FlashFusion());
 
-        // Fade blanco antes de cambiar escena
         yield return StartCoroutine(FadeBlanco());
 
         CambiarEscena();

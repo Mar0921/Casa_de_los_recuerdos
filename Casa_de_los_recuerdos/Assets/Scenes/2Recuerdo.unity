@@ -384,6 +384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaebe4076cfa578489999f510aa371aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CinematicaFusion
+  soloFadeTransicion: 1
   lumen: {fileID: 0}
   animLumen: {fileID: 0}
   vyre: {fileID: 0}
