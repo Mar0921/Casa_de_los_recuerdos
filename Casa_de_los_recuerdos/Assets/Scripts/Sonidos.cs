@@ -1,12 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Sonidos : MonoBehaviour
 {
-    [Header("M�sica de Fondo")]
+    [Header("Música de Fondo")]
     public AudioSource audioSourceMusica;
     public AudioClip musicaFondo;
     [Range(0f, 1f)]
-    public float volumenMusica = 0.5f;
+    public float volumenMusica = 1f;
 
     void Start()
     {
@@ -19,13 +19,17 @@ public class Sonidos : MonoBehaviour
         {
             audioSourceMusica.clip = musicaFondo;
             audioSourceMusica.loop = true;
-            audioSourceMusica.playOnAwake = true;
+            audioSourceMusica.playOnAwake = false;
 
-            float volumenGuardado = PlayerPrefs.GetFloat("VolumenMusica", 0.5f);
-            CambiarVolumenMusica(volumenGuardado);
 
+            float volumenInicial = PlayerPrefs.HasKey("VolumenMusica")
+                ? PlayerPrefs.GetFloat("VolumenMusica")
+                : volumenMusica; // ← este es tu valor del Inspector
+
+            CambiarVolumenMusica(volumenInicial);
             audioSourceMusica.Play();
-            Debug.Log("M�sica de fondo iniciada con volumen: " + audioSourceMusica.volume);
+
+            Debug.Log("Música de fondo iniciada con volumen: " + audioSourceMusica.volume);
         }
     }
 
@@ -34,6 +38,9 @@ public class Sonidos : MonoBehaviour
         volumenMusica = Mathf.Clamp01(nuevoVolumen);
         if (audioSourceMusica != null)
             audioSourceMusica.volume = volumenMusica;
+
+        PlayerPrefs.SetFloat("VolumenMusica", volumenMusica);
+        PlayerPrefs.Save();
     }
 
     public void DetenerMusica()

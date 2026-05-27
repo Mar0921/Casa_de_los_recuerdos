@@ -222,7 +222,7 @@ public class GestorRompibles : MonoBehaviour
         }
         else if (!llaveYaActivada && rompiblesEnEscena.Count > 0)
         {
-            estilo.normal.textColor = Color.yellow;
+            estilo.normal.textColor = Color.cyan;
             GUI.color = new Color(0.5f, 0.5f, 0, 0.6f);
             GUI.Box(new Rect(anchoPantalla / 2 - 300, ySegundaLinea - 10, 600, 85), "");
             GUI.color = Color.white;

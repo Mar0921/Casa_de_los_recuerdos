@@ -35,9 +35,14 @@ public class TentaculoPerseguidor : MonoBehaviour
     public ParticleSystem particulasMuerte;
 
     [Header("Sistema de Golpes")]
-    public int golpesNecesarios = 1;  
+    public int golpesNecesarios = 1;
     private int golpesRecibidos = 0;
     private bool estaMuerto = false;
+
+    [Header("Efecto al atacar al jugador")]
+    public float duracionEfectoOscuridad = 0.5f;
+    public float duracionFadeOut = 1.5f;
+    public Color colorOscuridad = Color.black;
 
     private Transform jugadorActual;
     private bool estaAtacando = false;
@@ -45,6 +50,7 @@ public class TentaculoPerseguidor : MonoBehaviour
     private float temporizadorBusqueda = 0f;
     private Vector3 posicionInicial;
     private Quaternion rotacionInicial;
+    private bool jugadorSiendoAtacado = false;
 
     void Start()
     {
@@ -83,7 +89,7 @@ public class TentaculoPerseguidor : MonoBehaviour
             temporizadorBusqueda = frecuenciaBusquedaJugador;
         }
 
-        if (jugadorActual == null || estaAtacando) return;
+        if (jugadorActual == null || estaAtacando || jugadorSiendoAtacado) return;
 
         float distancia = Vector3.Distance(transform.position, jugadorActual.position);
 
@@ -171,6 +177,7 @@ public class TentaculoPerseguidor : MonoBehaviour
         if (sonidoAtaque != null && audioSource != null)
             audioSource.PlayOneShot(sonidoAtaque);
 
+        // Movimiento de ataque hacia adelante
         Vector3 posicionOriginal = transform.position;
         Vector3 direccionAtaque = (jugadorActual.position - transform.position).normalized;
         direccionAtaque.y = 0f;
@@ -192,8 +199,7 @@ public class TentaculoPerseguidor : MonoBehaviour
             Instantiate(particulaGolpe, jugadorActual.position, Quaternion.identity);
         }
 
-        yield return new WaitForSeconds(0.1f);
-
+        // Retroceso del tentáculo
         Vector3 posicionDespuesLatigazo = transform.position;
         tiempo = 0f;
 
@@ -205,8 +211,73 @@ public class TentaculoPerseguidor : MonoBehaviour
             yield return null;
         }
 
+        transform.position = posicionOriginal;
+
+        // ✅ AHORA SÍ: Después del retroceso, activar el efecto de derrota
+        if (jugadorActual != null)
+        {
+            yield return StartCoroutine(ActivarEfectoDerrota());
+        }
+
         yield return new WaitForSeconds(cooldownPostAtaque);
         ResetearEstadoAtaque();
+    }
+
+    IEnumerator ActivarEfectoDerrota()
+    {
+        jugadorSiendoAtacado = true;
+
+        Camera cam = Camera.main;
+        if (cam == null)
+        {
+            Debug.LogError("No se encontró la cámara principal");
+            ReiniciarEscena();
+            yield break;
+        }
+
+        // Crear canvas con imagen oscura
+        GameObject canvasObj = new GameObject("CanvasOscuridadTemp");
+        Canvas canvas = canvasObj.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 999;
+
+        canvasObj.AddComponent<UnityEngine.UI.CanvasScaler>();
+        canvasObj.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+
+        GameObject imagenObj = new GameObject("ImagenOscura");
+        imagenObj.transform.SetParent(canvas.transform, false);
+        UnityEngine.UI.Image imagenOscura = imagenObj.AddComponent<UnityEngine.UI.Image>();
+        imagenOscura.color = new Color(colorOscuridad.r, colorOscuridad.g, colorOscuridad.b, 0f);
+
+        RectTransform rect = imagenOscura.rectTransform;
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.sizeDelta = Vector2.zero;
+
+        // Efecto de oscurecimiento progresivo
+        float tiempo = 0f;
+        while (tiempo < duracionEfectoOscuridad)
+        {
+            tiempo += Time.deltaTime;
+            float alpha = Mathf.Lerp(0f, 1f, tiempo / duracionEfectoOscuridad);
+            imagenOscura.color = new Color(colorOscuridad.r, colorOscuridad.g, colorOscuridad.b, alpha);
+            yield return null;
+        }
+
+        imagenOscura.color = new Color(colorOscuridad.r, colorOscuridad.g, colorOscuridad.b, 1f);
+
+        // Mantener oscuro un momento
+        yield return new WaitForSeconds(0.3f);
+
+        // Reiniciar escena
+        ReiniciarEscena();
+    }
+
+    void ReiniciarEscena()
+    {
+        Debug.Log("Reiniciando escena por ataque del tentáculo...");
+        string escenaActual = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(escenaActual);
     }
 
     void ResetearEstadoAtaque()
@@ -248,7 +319,6 @@ public class TentaculoPerseguidor : MonoBehaviour
             Destroy(particulasMuerte.gameObject, 2f);
         }
 
-        // 🔥 IMPORTANTE: Notificar al campo burbuja
         if (campoBurbuja != null)
         {
             campoBurbuja.TentaculoEliminado();
@@ -281,6 +351,7 @@ public class TentaculoPerseguidor : MonoBehaviour
         estaAtacando = false;
         puedeAtacar = true;
         estaMuerto = false;
+        jugadorSiendoAtacado = false;
         golpesRecibidos = 0;
         transform.position = posicionInicial;
         transform.rotation = rotacionInicial;

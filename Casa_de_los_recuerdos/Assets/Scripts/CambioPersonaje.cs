@@ -10,6 +10,11 @@ public class CambioPersonaje : MonoBehaviour
     [Header("Efectos")]
     public ParticleSystem particulasCambio; // Prefab o referencia a un sistema de partículas
 
+    [Header("Sonido")]
+    public AudioSource audioSource;
+    public AudioClip sonidoCambio;
+    public float volumenSonido = 1f;
+
     private bool puedeCambiar = true;
     private bool estaCambiando = false;
     private GameObject personajeActual;
@@ -19,6 +24,16 @@ public class CambioPersonaje : MonoBehaviour
         personajeActual = lumen;
         lumen.SetActive(true);
         vyre.SetActive(false);
+
+        // Configurar AudioSource si no está asignado
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null && sonidoCambio != null)
+                audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        if (audioSource != null)
+            audioSource.volume = volumenSonido;
     }
 
     void Update()
@@ -33,6 +48,12 @@ public class CambioPersonaje : MonoBehaviour
     {
         estaCambiando = true;
         puedeCambiar = false;
+
+        // 🔊 Reproducir sonido al inicio del cambio
+        if (audioSource != null && sonidoCambio != null)
+        {
+            audioSource.PlayOneShot(sonidoCambio, volumenSonido);
+        }
 
         // Mostrar partículas en la posición del personaje actual
         if (particulasCambio != null)

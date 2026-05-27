@@ -901,6 +901,7 @@ MonoBehaviour:
   sonidoAlTocar: {fileID: 0}
   audioSource: {fileID: 0}
   efectoParticula: {fileID: 0}
+  colorFade: {r: 0, g: 0, b: 0, a: 1}
 --- !u!64 &252730013
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4697,6 +4698,94 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1088584373}
   m_Mesh: {fileID: 8211372540250625004, guid: 13457427b5150ac4bb0c3a1e39e92702, type: 3}
+--- !u!1 &1111621574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1111621576}
+  - component: {fileID: 1111621575}
+  - component: {fileID: 1111621577}
+  m_Layer: 0
+  m_Name: Cinematica
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1111621575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111621574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaebe4076cfa578489999f510aa371aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CinematicaFusion
+  lumen: {fileID: 0}
+  animLumen: {fileID: 0}
+  vyre: {fileID: 0}
+  animVyre: {fileID: 0}
+  animSombra: {fileID: 0}
+  tiempoParaGrito: 13
+  paramVelX: VelX
+  paramVelY: VelY
+  paramBoolCaminar: 
+  valorVelYCaminar: 1
+  velocidadCaminar: 2
+  velocidadConverger: 1
+  distanciaParaFusionar: 0.8
+  particulasFusion: {fileID: 0}
+  duracionFlash: 1.5
+  velocidadFlash: 2
+  duracionFadeBlanco: 1.5
+  nombreEscenaSiguiente: 4nivelHermana
+  tiempoFijoParaCambiarEscena: 7.5
+  audioSource: {fileID: 0}
+  musicaCinematica: {fileID: 0}
+  sonidoFusion: {fileID: 0}
+--- !u!4 &1111621576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111621574}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.32433, y: 1.46234, z: 6.58589}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1111621577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111621574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615fce76ee6e60744ade5d1b58debcdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InicioEscena
+  duracionFadeIn: 0.5
+  colorFade: {r: 1, g: 1, b: 1, a: 1}
+  animatorPersonaje: {fileID: 0}
+  parametroAnimacion: MeLevante
+  tiempoAnimacion: 2
+  sonidoFinal: {fileID: 0}
+  audioSource: {fileID: 0}
+  volumenSonido: 1
+  jugador: {fileID: 0}
 --- !u!64 &1119520683
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -10069,3 +10158,4 @@ SceneRoots:
   - {fileID: 461730040}
   - {fileID: 1754010241}
   - {fileID: 2006387122}
+  - {fileID: 1111621576}

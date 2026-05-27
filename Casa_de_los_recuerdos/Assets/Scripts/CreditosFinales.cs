@@ -80,7 +80,7 @@ public class CreditosFinales : MonoBehaviour
     {
         string texto = "<b><size=36>LA CASA DE LOS RECUERDOS</size></b>\n\n";
         texto += "<size=28>Créditos finales</size>\n\n";
-        texto += "<size=22><i>Un viaje entre recuerdos y superación</i></size>\n\n";
+        texto += "<size=22><i>Donde tus miedos toman forma</i></size>\n\n";
 
         // Equipo de desarrollo MAGO
         texto += "<b>Equipo de desarrollo MAGO:</b><br>\n";

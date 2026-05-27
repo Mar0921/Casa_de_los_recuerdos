@@ -530,7 +530,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -1311,6 +1311,9 @@ MonoBehaviour:
   vyre: {fileID: 614090925}
   cooldown: 1
   particulasCambio: {fileID: 3399974184335313378, guid: cce9be93035ae9a4e815d270f2d23833, type: 3}
+  audioSource: {fileID: 171994323}
+  sonidoCambio: {fileID: 8300000, guid: 432b6ba8320a7b14081dca5b1ed46037, type: 3}
+  volumenSonido: 1
 --- !u!114 &171994326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2106,6 +2109,55 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 690106047850165013, guid: 2e28cf54f683fb44daec3f24091b7cdc, type: 3}
+--- !u!1 &247787124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 247787126}
+  - component: {fileID: 247787125}
+  m_Layer: 0
+  m_Name: Volumen_Global
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &247787125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247787124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 1
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 778d50e8d282d4c428b87422325c8c83, type: 2}
+--- !u!4 &247787126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247787124}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.30545, y: 15.21276, z: 135.52725}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &261961598 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7862391691550088030, guid: 2e28cf54f683fb44daec3f24091b7cdc, type: 3}
@@ -3612,7 +3664,7 @@ MonoBehaviour:
   audioSource: {fileID: 420932393}
   sonidoPaso: {fileID: 8300000, guid: 43a6b046fef08564bb925eb381526e6d, type: 3}
   sonidoSalto: {fileID: 8300000, guid: 73de49b1f0765344a9d451aca124251b, type: 3}
-  intervaloEntrepasos: 0.5
+  intervaloEntrepasos: 0.6
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -19460,3 +19512,4 @@ SceneRoots:
   - {fileID: 200433560}
   - {fileID: 619961111}
   - {fileID: 368099196}
+  - {fileID: 247787126}

@@ -913,6 +913,55 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4563637298700409943, guid: e24e1ea5465584941b840a78daef90f2, type: 3}
+--- !u!1 &197293654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 197293656}
+  - component: {fileID: 197293655}
+  m_Layer: 0
+  m_Name: Volumen_Global
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &197293655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197293654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 1
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 778d50e8d282d4c428b87422325c8c83, type: 2}
+--- !u!4 &197293656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197293654}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.30545, y: 15.21276, z: 135.52725}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &205462291
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1276,7 +1325,7 @@ RectTransform:
   m_GameObject: {fileID: 238364966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 79715168}
@@ -1954,7 +2003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8b6c48f97efb3f84f8489ae58db40a1a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8b6c48f97efb3f84f8489ae58db40a1a, type: 3}
       propertyPath: m_TagString
@@ -5650,6 +5699,9 @@ MonoBehaviour:
   vyre: {fileID: 314065444}
   cooldown: 2
   particulasCambio: {fileID: 3399974184335313378, guid: cce9be93035ae9a4e815d270f2d23833, type: 3}
+  audioSource: {fileID: 779579928}
+  sonidoCambio: {fileID: 8300000, guid: 432b6ba8320a7b14081dca5b1ed46037, type: 3}
+  volumenSonido: 1
 --- !u!114 &779579931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7853,7 +7905,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -10576,7 +10628,7 @@ MonoBehaviour:
   audioSource: {fileID: 1967598093}
   sonidoPaso: {fileID: 8300000, guid: 43a6b046fef08564bb925eb381526e6d, type: 3}
   sonidoSalto: {fileID: 8300000, guid: 73de49b1f0765344a9d451aca124251b, type: 3}
-  intervaloEntrepasos: 0.5
+  intervaloEntrepasos: 0.6
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -14450,3 +14502,4 @@ SceneRoots:
   - {fileID: 2000421977}
   - {fileID: 2027063905}
   - {fileID: 334938807}
+  - {fileID: 197293656}
