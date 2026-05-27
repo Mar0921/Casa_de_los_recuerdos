@@ -153,6 +153,7 @@ MonoBehaviour:
   tiempoInicialEspera: 1
   duracionFadeOut: 2
   duracionFadeMusica: 1.5
+  extraScroll: 200
   contenido: {fileID: 2043137586}
   imagenesDesarrollo: []
   textoCreditos: {fileID: 1669137383}
@@ -195,7 +196,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 793c9549d512aff45963a404db2defa9, type: 3}
+  m_Resource: {fileID: 8300000, guid: 7c851573345edb14b9767d332ee485f6, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
